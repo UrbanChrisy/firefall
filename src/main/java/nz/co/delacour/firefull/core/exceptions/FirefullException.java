@@ -1,4 +1,4 @@
-package nz.co.delacour.firefull.exceptions;
+package nz.co.delacour.firefull.core.exceptions;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬

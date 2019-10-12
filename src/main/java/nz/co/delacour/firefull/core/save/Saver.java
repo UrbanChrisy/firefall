@@ -1,7 +1,8 @@
-package nz.co.delacour.firefull.load;
+package nz.co.delacour.firefull.core.save;
 
-import nz.co.delacour.firefull.Firefull;
-import nz.co.delacour.firefull.HasId;
+
+import nz.co.delacour.firefull.core.Firefull;
+import nz.co.delacour.firefull.core.HasId;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -9,11 +10,11 @@ import nz.co.delacour.firefull.HasId;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class Loader {
+public class Saver {
 
     private final Firefull firefull;
 
-    public Loader(Firefull firefull) {
+    public Saver(Firefull firefull) {
         this.firefull = firefull;
     }
 
@@ -21,8 +22,7 @@ public class Loader {
         return firefull;
     }
 
-    public <T extends HasId> Query<T> type(Class<T> entityClass) {
-        return new Query<>(this, entityClass);
+    public <T extends HasId> TypeSaver<T> type(Class<T> entityClass) {
+        return new TypeSaver<>(this, entityClass);
     }
-
 }

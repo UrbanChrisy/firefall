@@ -1,4 +1,4 @@
-package nz.co.delacour.firefull.annotations;
+package nz.co.delacour.firefull.core.annotations;
 
 import java.lang.annotation.*;
 

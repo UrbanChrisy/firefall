@@ -1,4 +1,4 @@
-package nz.co.delacour.firefull.load;
+package nz.co.delacour.firefull.core.load;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬

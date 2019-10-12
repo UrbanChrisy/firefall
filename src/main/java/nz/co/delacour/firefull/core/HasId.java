@@ -1,9 +1,6 @@
-package nz.co.delacour.firefull;
+package nz.co.delacour.firefull.core;
 
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.annotation.Exclude;
-import com.google.common.base.Strings;
-import lombok.var;
 
 
 /**
@@ -12,7 +9,7 @@ import lombok.var;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class HasId<T> {
+public class HasId<T extends HasId<T>> {
 
     private final Class<T> entityClass;
 
@@ -33,14 +30,7 @@ public class HasId<T> {
     }
 
     @Exclude
-    public DocumentReference ref() {
-
-        if (Strings.isNullOrEmpty(this.getId())) {
-            return null;
-        }
-
-        var kind = Ref.getKind(this.entityClass);
-//        return getFirestore().collection(kind).document(this.getId());
-        return null;
+    public Ref<T> ref() {
+        return new Ref<T>(entityClass, id);
     }
 }

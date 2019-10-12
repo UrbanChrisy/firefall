@@ -5,25 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>nz.co.delacour</groupId>
-    <artifactId>firefall</artifactId>
-    <version>0.0.1</version>
+    <artifactId>firefall-core</artifactId>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
 
     <name>Firefall</name>
     <description>Objectify inspired Google Firestore interface wrapper</description>
     <url>https://github.com/dlcgl/firefall</url>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <maven.source.version>2.2.1</maven.source.version>
-        <maven.javadoc.version>2.9.1</maven.javadoc.version>
-        <maven.gpg.version>1.5</maven.gpg.version>
-
-        <lombok.version>1.18.10</lombok.version>
-        <firestore.version>1.23.0</firestore.version>
-
-    </properties>
 
     <licenses>
         <license>
@@ -46,6 +34,23 @@
         <developerConnection>scm:git:ssh://github.com:dlcgl/firefall.git</developerConnection>
         <url>http://github.com/dlcgl/firefall/tree/master</url>
     </scm>
+    
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven.nexus.version>1.6.7</maven.nexus.version>
+        <maven.source.version>2.2.1</maven.source.version>
+        <maven.javadoc.version>2.9.1</maven.javadoc.version>
+        <maven.gpg.version>1.5</maven.gpg.version>
+
+        <lombok.version>1.18.10</lombok.version>
+        <firestore.version>1.23.0</firestore.version>
+        <slf4j.version>1.7.25</slf4j.version>
+
+    </properties>
 
     <distributionManagement>
         <snapshotRepository>
@@ -58,9 +63,19 @@
         </repository>
     </distributionManagement>
 
-
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${maven.nexus.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -128,6 +143,22 @@
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-firestore</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

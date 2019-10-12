@@ -1,4 +1,4 @@
-package nz.co.delacour.firefull;
+package nz.co.delacour.firefull.core;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.common.base.Preconditions;
@@ -25,7 +25,7 @@ public class FirefullService {
     }
 
     public static FirefullFactory factory() {
-        Preconditions.checkState(factory != null, "You must call nz.co.delacour.firefull.FirefullFactory.init() before using nz.co.delacour.firefull.Firefull");
+        Preconditions.checkState(factory != null, "You must call FirefullFactory.init() before using Firefull");
         return factory;
     }
 

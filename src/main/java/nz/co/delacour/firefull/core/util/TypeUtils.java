@@ -1,4 +1,7 @@
-package nz.co.delacour.firefull.util;
+package nz.co.delacour.firefull.core.util;
+
+import com.google.common.base.Strings;
+import nz.co.delacour.firefull.core.annotations.Entity;
 
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
@@ -18,6 +21,17 @@ import java.util.Map;
 
 public class TypeUtils {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = new HashMap<>();
+
+    static {
+        PRIMITIVE_TO_WRAPPER.put(Boolean.TYPE, Boolean.class);
+        PRIMITIVE_TO_WRAPPER.put(Byte.TYPE, Byte.class);
+        PRIMITIVE_TO_WRAPPER.put(Short.TYPE, Short.class);
+        PRIMITIVE_TO_WRAPPER.put(Integer.TYPE, Integer.class);
+        PRIMITIVE_TO_WRAPPER.put(Long.TYPE, Long.class);
+        PRIMITIVE_TO_WRAPPER.put(Float.TYPE, Float.class);
+        PRIMITIVE_TO_WRAPPER.put(Double.TYPE, Double.class);
+        PRIMITIVE_TO_WRAPPER.put(Character.TYPE, Character.class);
+    }
 
     private TypeUtils() {
     }
@@ -75,8 +89,8 @@ public class TypeUtils {
     }
 
     public static boolean isAssignableFrom(Class<?> to, Class<?> from) {
-        Class<?> notPrimitiveTo = to.isPrimitive() ? (Class)PRIMITIVE_TO_WRAPPER.get(to) : to;
-        Class<?> notPrimitiveFrom = from.isPrimitive() ? (Class)PRIMITIVE_TO_WRAPPER.get(from) : from;
+        Class<?> notPrimitiveTo = to.isPrimitive() ? (Class) PRIMITIVE_TO_WRAPPER.get(to) : to;
+        Class<?> notPrimitiveFrom = from.isPrimitive() ? (Class) PRIMITIVE_TO_WRAPPER.get(from) : from;
         return notPrimitiveTo.isAssignableFrom(notPrimitiveFrom);
     }
 
@@ -97,14 +111,26 @@ public class TypeUtils {
         return getDeclaredAnnotation(onClass, annotationType) != null;
     }
 
-    static {
-        PRIMITIVE_TO_WRAPPER.put(Boolean.TYPE, Boolean.class);
-        PRIMITIVE_TO_WRAPPER.put(Byte.TYPE, Byte.class);
-        PRIMITIVE_TO_WRAPPER.put(Short.TYPE, Short.class);
-        PRIMITIVE_TO_WRAPPER.put(Integer.TYPE, Integer.class);
-        PRIMITIVE_TO_WRAPPER.put(Long.TYPE, Long.class);
-        PRIMITIVE_TO_WRAPPER.put(Float.TYPE, Float.class);
-        PRIMITIVE_TO_WRAPPER.put(Double.TYPE, Double.class);
-        PRIMITIVE_TO_WRAPPER.put(Character.TYPE, Character.class);
+    public static String getKind(Class<?> clazz) {
+        String kind = getKindRecursive(clazz);
+        return kind == null ? clazz.getSimpleName() : kind;
+    }
+
+    public static String getKindRecursive(Class<?> clazz) {
+        if (clazz == Object.class) {
+            return null;
+        } else {
+            String kind = getKindHere(clazz);
+            return !Strings.isNullOrEmpty(kind) ? kind : getKindRecursive(clazz.getSuperclass());
+        }
+    }
+
+    public static String getKindHere(Class<?> clazz) {
+        Entity ourAnn = TypeUtils.getDeclaredAnnotation(clazz, Entity.class);
+        if (ourAnn != null) {
+            return ourAnn.name().length() != 0 ? ourAnn.name() : clazz.getSimpleName();
+        } else {
+            return null;
+        }
     }
 }
