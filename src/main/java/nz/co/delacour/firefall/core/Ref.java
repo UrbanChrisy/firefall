@@ -12,6 +12,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import static nz.co.delacour.firefall.core.FirefullService.fir;
+
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  * Created by Chris on 29/09/19.
@@ -32,7 +34,7 @@ public class Ref<T extends HasId> {
             return;
         }
 
-//        this.reference = fir().load().type(entityClass).id(id).ref();
+        this.reference = fir().load().type(entityClass).ref(id);
     }
 
     public Ref(DocumentReference reference) {

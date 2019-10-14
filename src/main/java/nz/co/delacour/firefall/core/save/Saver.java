@@ -25,4 +25,5 @@ public class Saver {
     public <T extends HasId> TypeSaver<T> type(Class<T> entityClass) {
         return new TypeSaver<>(this, entityClass);
     }
+
 }

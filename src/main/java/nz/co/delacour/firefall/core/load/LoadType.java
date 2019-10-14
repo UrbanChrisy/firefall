@@ -37,6 +37,10 @@ public class LoadType<T extends HasId>  {
         return new LoadResult<>(collection.document(id), entityClass);
     }
 
+    public DocumentReference ref(String id) {
+        return this.collection.document(id);
+    }
+
     public LoadResult<T> ref(DocumentReference reference) {
         return new LoadResult<>(reference, entityClass);
     }

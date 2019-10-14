@@ -34,6 +34,7 @@ public class DeleteResults<T extends HasId> {
         for (DocumentReference reference : references) {
             batch.delete(reference, options);
         }
+
         this.future = batch.commit();
     }
 

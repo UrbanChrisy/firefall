@@ -69,4 +69,5 @@ public class SaveResult<T extends HasId> {
         this.future.addListener(runnable, executor);
         return this;
     }
+
 }
