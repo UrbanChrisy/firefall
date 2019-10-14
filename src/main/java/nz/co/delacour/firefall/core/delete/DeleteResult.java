@@ -1,15 +1,16 @@
 package nz.co.delacour.firefall.core.delete;
 
 import com.google.api.core.ApiFuture;
+import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
-import com.google.cloud.firestore.Transaction;
 import com.google.cloud.firestore.WriteResult;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.exceptions.FirefullException;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -19,45 +20,32 @@ import java.util.concurrent.ExecutionException;
 
 public class DeleteResult<T extends HasId> {
 
-    private final DocumentReference reference;
+    private final ApiFuture<WriteResult> future;
 
-    private Precondition options = Precondition.NONE;
+    public DeleteResult(DocumentReference reference, Precondition options) {
+        if (reference == null) {
+            this.future = ApiFutures.immediateFuture(null);
+        } else {
 
-    public DeleteResult(DocumentReference reference) {
-        this.reference = reference;
-    }
+            if (options == null) {
+                options = Precondition.NONE;
+            }
 
-    public DeleteResult<T> options(Precondition options) {
-        this.options = options;
-        return this;
+            this.future = reference.delete(options);
+        }
     }
 
     public void now() {
-
-        if (reference == null) {
-            return;
-        }
-
         try {
-            this.reference.delete(this.options).get();
+            this.future.get();
         } catch (InterruptedException | ExecutionException e) {
             throw new FirefullException(e);
         }
     }
 
-    @Nullable
-    public ApiFuture<WriteResult> async() {
-
-        if (this.reference == null) {
-            return null;
-        }
-
-        return this.reference.delete(this.options);
+    public DeleteResult<T> listener(Runnable runnable, Executor executor) {
+        this.future.addListener(runnable, executor);
+        return this;
     }
-
-    public DeleteResultTransaction<T> transaction(Transaction transaction) {
-        return new DeleteResultTransaction<>(transaction, this.reference, this.options);
-    }
-
 
 }

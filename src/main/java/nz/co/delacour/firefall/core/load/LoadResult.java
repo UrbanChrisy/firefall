@@ -9,9 +9,11 @@ import com.google.common.base.Strings;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefullException;
 import nz.co.delacour.firefall.core.exceptions.NotFoundException;
+import nz.co.delacour.firefall.core.save.SaveResult;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -78,5 +80,10 @@ public class LoadResult<T extends HasId> {
         }
 
         return entity;
+    }
+
+    public LoadResult<T> listener(Runnable runnable, Executor executor) {
+        this.future.addListener(runnable, executor);
+        return this;
     }
 }

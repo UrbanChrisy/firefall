@@ -2,6 +2,7 @@ package nz.co.delacour.firefall.core.delete;
 
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Precondition;
 import lombok.var;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 import nz.co.delacour.firefall.core.HasId;
@@ -44,7 +45,21 @@ public class TypeDeleter<T extends HasId> {
     }
 
     public DeleteResult document(DocumentReference reference) {
-        return new DeleteResult(reference);
+        return new DeleteResult(reference, null);
+    }
+
+    public DeleteResult id(String id, Precondition options) {
+        var reference = this.collection.document(id);
+        return this.document(reference, options);
+    }
+
+    public DeleteResult entity(T entity, Precondition options) {
+        var reference = this.collection.document(entity.getId());
+        return this.document(reference, options);
+    }
+
+    public DeleteResult document(DocumentReference reference, Precondition options) {
+        return new DeleteResult(reference, options);
     }
 
     public DeleteResults ids(List<String> entities) {
@@ -58,6 +73,20 @@ public class TypeDeleter<T extends HasId> {
     }
 
     public DeleteResults documents(List<DocumentReference> references) {
-        return new DeleteResults(references, this.collection);
+        return new DeleteResults(references, this.collection, null);
+    }
+
+    public DeleteResults ids(List<String> entities, Precondition options) {
+        var references = entities.stream().map((id) -> this.collection.document(id)).collect(Collectors.toList());
+        return this.documents(references, options);
+    }
+
+    public DeleteResults entities(List<T> entities, Precondition options) {
+        var references = entities.stream().map(HasId::getId).filter(Objects::nonNull).map(this.collection::document).collect(Collectors.toList());
+        return this.documents(references, options);
+    }
+
+    public DeleteResults documents(List<DocumentReference> references, Precondition options) {
+        return new DeleteResults(references, this.collection, options);
     }
 }

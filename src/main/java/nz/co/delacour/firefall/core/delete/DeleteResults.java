@@ -4,12 +4,15 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
-import com.google.cloud.firestore.Transaction;
+import com.google.cloud.firestore.WriteResult;
+import lombok.var;
 import nz.co.delacour.firefall.core.exceptions.FirefullException;
 import nz.co.delacour.firefall.core.HasId;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -19,40 +22,32 @@ import java.util.concurrent.ExecutionException;
 
 public class DeleteResults<T extends HasId> {
 
-    private final List<DocumentReference> references;
+    private final ApiFuture<List<WriteResult>> future;
 
-    private final CollectionReference collection;
+    public DeleteResults(List<DocumentReference> references, CollectionReference collection, Precondition options) {
 
-    private Precondition options = Precondition.NONE;
+        if (options == null) {
+            options = Precondition.NONE;
+        }
 
-    public DeleteResults(List<DocumentReference> references, CollectionReference collection) {
-        this.references = references;
-        this.collection = collection;
-    }
-
-    public DeleteResults<T> options(Precondition options) {
-        this.options = options;
-        return this;
+        var batch = collection.getFirestore().batch();
+        for (DocumentReference reference : references) {
+            batch.delete(reference, options);
+        }
+        this.future = batch.commit();
     }
 
     public void now() {
         try {
-            async().get();
+            this.future.get();
         } catch (InterruptedException | ExecutionException e) {
             throw new FirefullException(e);
         }
     }
 
-    public ApiFuture<Void> async() {
-        return collection.getFirestore().runTransaction(transaction -> {
-            for (DocumentReference reference : this.references) {
-                transaction.delete(reference, options);
-            }
-            return null;
-        });
+    public DeleteResults<T> listener(Runnable runnable, Executor executor) {
+        this.future.addListener(runnable, executor);
+        return this;
     }
 
-    public DeleteResultsTransaction<T> transaction(Transaction transaction) {
-        return new DeleteResultsTransaction<>(transaction);
-    }
 }

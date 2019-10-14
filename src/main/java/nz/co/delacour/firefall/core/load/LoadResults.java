@@ -11,6 +11,7 @@ import nz.co.delacour.firefall.core.exceptions.FirefullException;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -51,4 +52,8 @@ public class LoadResults<T extends HasId> {
         }
     }
 
+    public LoadResults<T> listener(Runnable runnable, Executor executor) {
+        this.future.addListener(runnable, executor);
+        return this;
+    }
 }

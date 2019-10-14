@@ -12,6 +12,7 @@ import nz.co.delacour.firefall.core.util.EntityMapper;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -62,5 +63,10 @@ public class SaveResult<T extends HasId> {
         }
 
         return this.entity;
+    }
+
+    public SaveResult<T> listener(Runnable runnable, Executor executor) {
+        this.future.addListener(runnable, executor);
+        return this;
     }
 }
