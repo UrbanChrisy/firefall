@@ -46,7 +46,10 @@ public class OnLoadTests extends TestBase {
 
         var savedEntity = fir().save().type(OnLoadEntity.class).entity(entity).now();
         assertNotNull(savedEntity);
-        assertEquals(savedEntity.getIncrementOnLoad(), 2);
+
+        var loadedEntity = fir().load().type(OnLoadEntity.class).id(savedEntity.getId()).now();
+        assertNotNull(loadedEntity);
+        assertEquals(loadedEntity.getIncrementOnLoad(), 2);
 
         fir().delete().type(OnLoadEntity.class).entity(entity).now();
     }

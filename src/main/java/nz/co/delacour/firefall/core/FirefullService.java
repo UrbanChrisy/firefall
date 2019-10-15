@@ -2,6 +2,7 @@ package nz.co.delacour.firefall.core;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.common.base.Preconditions;
+import nz.co.delacour.firefall.core.registrar.EntityMetadata;
 
 import java.io.Closeable;
 
@@ -35,12 +36,20 @@ public class FirefullService {
         return factory().fir();
     }
 
+    public static Closeable begin() {
+        return factory().open();
+    }
+
     public static void register(Class<? extends HasId> clazz) {
         factory().register(clazz);
     }
 
-    public static Closeable begin() {
-        return factory().open();
+    public static <T extends HasId> EntityMetadata<T> getMetadata(final String kind) {
+        return factory().getMetadata(kind);
+    }
+
+    public static <T extends HasId> EntityMetadata<T> getMetadata(final Class<T> entityClass) {
+        return factory().getMetadata(entityClass);
     }
 
 }

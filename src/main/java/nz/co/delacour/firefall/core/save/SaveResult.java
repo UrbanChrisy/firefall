@@ -8,11 +8,14 @@ import com.google.cloud.firestore.WriteResult;
 import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 import nz.co.delacour.firefall.core.util.EntityMapper;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+
+import static nz.co.delacour.firefall.core.FirefullService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -62,6 +65,8 @@ public class SaveResult<T extends HasId> {
             return null;
         }
 
+        executeOnSave(this.entity);
+
         return this.entity;
     }
 
@@ -70,4 +75,18 @@ public class SaveResult<T extends HasId> {
         return this;
     }
 
+
+    private void executeOnSave(T entity) {
+        var metadata = getMetadata(entityClass);
+        var onSaveMethods = metadata.getOnSaveMethods();
+
+        if (onSaveMethods.isEmpty()) {
+            return;
+        }
+
+        for (LifecycleMethod onSaveMethod : onSaveMethods) {
+            onSaveMethod.execute(entity);
+        }
+
+    }
 }

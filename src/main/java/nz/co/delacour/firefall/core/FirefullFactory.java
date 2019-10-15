@@ -1,6 +1,7 @@
 package nz.co.delacour.firefall.core;
 
 import com.google.cloud.firestore.Firestore;
+import nz.co.delacour.firefall.core.registrar.EntityMetadata;
 import nz.co.delacour.firefall.core.registrar.Registrar;
 
 import java.util.ArrayDeque;
@@ -59,5 +60,13 @@ public class FirefullFactory {
 
     public <T extends HasId> void register(final Class<T> clazz) {
         this.registrar.register(clazz);
+    }
+
+    public <T extends HasId> EntityMetadata<T> getMetadata(final String kind) {
+        return this.registrar.getMetadata(kind);
+    }
+
+    public <T extends HasId> EntityMetadata<T> getMetadata(final Class<T> entityClass) {
+        return this.registrar.getMetadata(entityClass);
     }
 }

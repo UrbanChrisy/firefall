@@ -6,14 +6,19 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.common.base.Strings;
+import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefullException;
 import nz.co.delacour.firefall.core.exceptions.NotFoundException;
+import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 import nz.co.delacour.firefall.core.save.SaveResult;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+
+import static nz.co.delacour.firefall.core.FirefullService.fir;
+import static nz.co.delacour.firefall.core.FirefullService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -22,6 +27,7 @@ import java.util.concurrent.Executor;
  */
 
 public class LoadResult<T extends HasId> {
+
 
     private final Class<T> entityClass;
 
@@ -68,8 +74,10 @@ public class LoadResult<T extends HasId> {
         if (entity == null || Strings.isNullOrEmpty(id)) {
             return null;
         }
-
         entity.setId(id);
+
+        executeOnLoad(entity);
+
         return entity;
     }
 
@@ -86,4 +94,19 @@ public class LoadResult<T extends HasId> {
         this.future.addListener(runnable, executor);
         return this;
     }
+
+    private void executeOnLoad(T entity) {
+        var metadata = getMetadata(entityClass);
+        var onLoadMethods = metadata.getOnLoadMethods();
+
+        if (onLoadMethods.isEmpty()) {
+            return;
+        }
+
+        for (LifecycleMethod onLoadMethod : onLoadMethods) {
+            onLoadMethod.execute(entity);
+        }
+
+    }
+
 }

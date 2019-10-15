@@ -30,11 +30,11 @@ public class EntityMetadata<T extends HasId> {
 
         for (final Method method : entityClass.getDeclaredMethods()) {
             if (method.isAnnotationPresent(OnSave.class)) {
-                onSaveMethods.add(new LifecycleMethod(method));
+                this.onSaveMethods.add(new LifecycleMethod(method));
             }
 
             if (method.isAnnotationPresent(OnLoad.class)) {
-                onLoadMethods.add(new LifecycleMethod(method));
+                this.onLoadMethods.add(new LifecycleMethod(method));
             }
 
         }

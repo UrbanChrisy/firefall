@@ -38,16 +38,9 @@ public class Firefull implements Closeable {
         return new Deleter(this);
     }
 
-    public <T extends HasId> LoadResult<T> path(String path, Class<T> entityClass) {
-        var ref = factory().getFirestore().document(path);
-        return new LoadResult<>(ref, entityClass);
-    }
-
     @Override
     public void close() {
-
         factory().close(this);
-
     }
 
 }

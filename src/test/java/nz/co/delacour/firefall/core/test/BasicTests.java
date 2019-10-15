@@ -38,6 +38,7 @@ public class BasicTests extends TestBase {
 
         var savedEntity = fir().load().type(Basic.class).id(null).now();
         assertNull(savedEntity);
+
     }
 
     @Test

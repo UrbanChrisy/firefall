@@ -28,10 +28,11 @@ public class LifecycleMethod {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            if (e.getCause() instanceof RuntimeException)
+            if (e.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) e.getCause();
-            else
+            } else {
                 throw new RuntimeException(e.getCause());
+            }
         }
     }
 }
