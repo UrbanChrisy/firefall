@@ -34,11 +34,11 @@ public class TypeSaver<T extends HasId> {
         return new LoadResult<>(this.collection.document(), this.entityClass);
     }
 
-    public SaveResult<T> save(T t) {
+    public SaveResult<T> entity(T t) {
         return new SaveResult<>(t, this.entityClass, this.collection);
     }
 
-    public SaveResults<T> save(List<T> items) {
+    public SaveResults<T> entities(List<T> items) {
         return new SaveResults<>(items, entityClass, this.collection);
     }
 

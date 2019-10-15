@@ -1,6 +1,7 @@
 package nz.co.delacour.firefall.core;
 
 import com.google.cloud.firestore.Firestore;
+import nz.co.delacour.firefall.core.registrar.Registrar;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -15,14 +16,21 @@ public class FirefullFactory {
 
     private final Firestore firestore;
 
+    private final Registrar registrar;
+
     private final ThreadLocal<Deque<Firefull>> stacks = ThreadLocal.withInitial(ArrayDeque::new);
 
     public FirefullFactory(Firestore firestore) {
         this.firestore = firestore;
+        this.registrar = new Registrar(this);
     }
 
     public Firestore getFirestore() {
         return firestore;
+    }
+
+    public Registrar getRegistrar() {
+        return registrar;
     }
 
     public Firefull fir() {
@@ -49,4 +57,7 @@ public class FirefullFactory {
         assert popped == ofy : "Mismatched Firefull instances; somehow the stack was corrupted";
     }
 
+    public <T extends HasId> void register(final Class<T> clazz) {
+        this.registrar.register(clazz);
+    }
 }

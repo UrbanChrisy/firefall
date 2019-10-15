@@ -35,6 +35,10 @@ public class FirefullService {
         return factory().fir();
     }
 
+    public static void register(Class<? extends HasId> clazz) {
+        factory().register(clazz);
+    }
+
     public static Closeable begin() {
         return factory().open();
     }

@@ -1,11 +1,14 @@
 package nz.co.delacour.firefall.core.test;
 
 import com.google.common.collect.Lists;
+import lombok.Data;
 import lombok.var;
+import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.util.TestBase;
-import nz.co.delacour.firefall.core.util.TestEntity;
 import org.junit.Test;
 
+import static nz.co.delacour.firefall.core.FirefullService.factory;
 import static nz.co.delacour.firefall.core.FirefullService.fir;
 import static org.junit.Assert.*;
 
@@ -17,42 +20,60 @@ import static org.junit.Assert.*;
 
 public class BasicTests extends TestBase {
 
+    @Data
+    @Entity
+    public static class Basic extends HasId<Basic> {
+
+        private String testString;
+
+        public Basic() {
+            super(Basic.class);
+        }
+
+    }
+
     @Test
     public void loadNullId() {
-        var user = fir().load().type(TestEntity.class).id(null).now();
-        assertNull(user);
+        factory().register(Basic.class);
+
+        var savedEntity = fir().load().type(Basic.class).id(null).now();
+        assertNull(savedEntity);
     }
 
     @Test
     public void saveEntityWithoutId() {
-        TestEntity testEntity = new TestEntity();
-        testEntity.setTestString("testEntity");
+        factory().register(Basic.class);
 
-        var entity = fir().save().type(TestEntity.class).save(testEntity).now();
+        Basic basic = new Basic();
+        basic.setTestString("testString");
+
+        var entity = fir().save().type(Basic.class).entity(basic).now();
 
         assertNotNull(entity);
         assertNotNull(entity.getId());
-        assertEquals(entity.getTestString(), testEntity.getTestString());
+        assertEquals(entity.getTestString(), basic.getTestString());
 
-        fir().delete().type(TestEntity.class).entity(entity).now();
+        fir().delete().type(Basic.class).entity(entity).now();
     }
 
     @Test
     public void saveEntitiesWithoutId() {
-        TestEntity testEntity1 = new TestEntity();
-        testEntity1.setTestString("testEntity1");
-        TestEntity testEntity2 = new TestEntity();
-        testEntity2.setTestString("testEntity2");
+        factory().register(Basic.class);
 
-        var entities = fir().save().type(TestEntity.class).save(Lists.newArrayList(testEntity1, testEntity2)).now();
+        Basic basic1 = new Basic();
+        basic1.setTestString("testString1");
+        Basic basic2 = new Basic();
+        basic2.setTestString("testString2");
+
+        var entities = fir().save().type(Basic.class).entities(Lists.newArrayList(basic1, basic2)).now();
 
         assertNotNull(entities);
         assertFalse(entities.isEmpty());
 
-        assertNotNull(testEntity1.getId());
-        assertNotNull(testEntity2.getId());
+        assertNotNull(basic1.getId());
+        assertNotNull(basic2.getId());
 
-        fir().delete().type(TestEntity.class).entities(entities).now();
+        fir().delete().type(Basic.class).entities(entities).now();
     }
 
 }
