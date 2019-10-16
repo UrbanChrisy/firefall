@@ -6,7 +6,7 @@ import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.util.TestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static nz.co.delacour.firefall.core.FirefullService.factory;
 import static nz.co.delacour.firefall.core.FirefullService.fir;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class BasicTests extends TestBase {
+public class BasicTest extends TestBase {
 
     @Data
     @Entity
@@ -42,7 +42,7 @@ public class BasicTests extends TestBase {
     }
 
     @Test
-    public void saveEntityWithoutId() {
+    public void saveEntity() {
         factory().register(Basic.class);
 
         Basic basic = new Basic();
@@ -53,12 +53,10 @@ public class BasicTests extends TestBase {
         assertNotNull(entity);
         assertNotNull(entity.getId());
         assertEquals(entity.getTestString(), basic.getTestString());
-
-        fir().delete().type(Basic.class).entity(entity).now();
     }
 
     @Test
-    public void saveEntitiesWithoutId() {
+    public void saveEntities() {
         factory().register(Basic.class);
 
         Basic basic1 = new Basic();
@@ -73,8 +71,6 @@ public class BasicTests extends TestBase {
 
         assertNotNull(basic1.getId());
         assertNotNull(basic2.getId());
-
-        fir().delete().type(Basic.class).entities(entities).now();
     }
 
 }

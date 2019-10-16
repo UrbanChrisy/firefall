@@ -6,7 +6,7 @@ import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.annotations.OnLoad;
 import nz.co.delacour.firefall.core.util.TestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static nz.co.delacour.firefall.core.FirefullService.factory;
 import static nz.co.delacour.firefall.core.FirefullService.fir;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class OnLoadTests extends TestBase {
+public class OnLoadTest extends TestBase {
 
     @Data
     @Entity
@@ -50,8 +50,6 @@ public class OnLoadTests extends TestBase {
         var loadedEntity = fir().load().type(OnLoadEntity.class).id(savedEntity.getId()).now();
         assertNotNull(loadedEntity);
         assertEquals(loadedEntity.getIncrementOnLoad(), 2);
-
-        fir().delete().type(OnLoadEntity.class).entity(entity).now();
     }
 
 }

@@ -26,7 +26,7 @@ public class Registrar {
 
     public <T extends HasId> void register(Class<T> clazz) {
         if (!TypeUtils.isDeclaredAnnotationPresent(clazz, Entity.class)) {
-            throw new IllegalArgumentException(clazz + " must be annotated with either @Entity or @Subclass");
+            throw new IllegalArgumentException(clazz + " must be annotated with @Entity");
         }
 
         String kind = TypeUtils.getKind(clazz);

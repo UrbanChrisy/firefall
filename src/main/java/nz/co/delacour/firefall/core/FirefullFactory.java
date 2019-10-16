@@ -36,10 +36,12 @@ public class FirefullFactory {
 
     public Firefull fir() {
         final Deque<Firefull> stack = stacks.get();
-        if (stack.isEmpty())
+        if (stack.isEmpty()) {
             throw new IllegalStateException("You have not started a Firefull context. You are probably missing the " +
                     "FirefullFilter. If you are not running in the context of an http request, see the " +
                     "Firefull.run() method.");
+        }
+
         return stack.getLast();
     }
 
