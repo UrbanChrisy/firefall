@@ -1,10 +1,8 @@
 package nz.co.delacour.firefall.core.test;
 
 import com.google.common.collect.Lists;
-import lombok.Data;
 import lombok.var;
-import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.annotations.Entity;
+import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.util.TestBase;
 import org.junit.jupiter.api.Test;
 
@@ -19,18 +17,6 @@ import static org.junit.Assert.*;
  */
 
 public class BasicTest extends TestBase {
-
-    @Data
-    @Entity
-    public static class Basic extends HasId<Basic> {
-
-        private String testString;
-
-        public Basic() {
-            super(Basic.class);
-        }
-
-    }
 
     @Test
     public void loadNullId() {
@@ -48,10 +34,14 @@ public class BasicTest extends TestBase {
         Basic basic = new Basic();
         basic.setTestString("testString");
 
-        var entity = fir().save().type(Basic.class).entity(basic).now();
+        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+        assertNotNull(savedEntity);
+        assertNotNull(savedEntity.getId());
 
+        var entity = fir().load().type(Basic.class).id(savedEntity.getId()).now();
         assertNotNull(entity);
         assertNotNull(entity.getId());
+        assertEquals(entity.getId(), savedEntity.getId());
         assertEquals(entity.getTestString(), basic.getTestString());
     }
 
@@ -73,4 +63,33 @@ public class BasicTest extends TestBase {
         assertNotNull(basic2.getId());
     }
 
+    @Test
+    public void save2xEntity() {
+        factory().register(Basic.class);
+
+        Basic basic = new Basic();
+        basic.setTestString("testString");
+
+        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+        assertNotNull(savedEntity);
+        assertNotNull(savedEntity.getId());
+
+        var entity = fir().load().type(Basic.class).id(savedEntity.getId()).now();
+        assertNotNull(entity);
+        assertNotNull(entity.getId());
+        assertEquals(entity.getId(), savedEntity.getId());
+        assertEquals(entity.getTestString(), basic.getTestString());
+
+        entity.setTestString("testString2");
+
+        var saved2xEntity = fir().save().type(Basic.class).entity(entity).now();
+        assertNotNull(savedEntity);
+        assertNotNull(savedEntity.getId());
+
+        var entity2 = fir().load().type(Basic.class).id(savedEntity.getId()).now();
+        assertNotNull(entity2);
+        assertNotNull(entity2.getId());
+        assertEquals(entity2.getId(), savedEntity.getId());
+        assertEquals(entity2.getTestString(), saved2xEntity.getTestString());
+    }
 }

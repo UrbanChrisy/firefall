@@ -41,7 +41,6 @@ public class FirefullFactory {
                     "FirefullFilter. If you are not running in the context of an http request, see the " +
                     "Firefull.run() method.");
         }
-
         return stack.getLast();
     }
 
@@ -71,4 +70,5 @@ public class FirefullFactory {
     public <T extends HasId> EntityMetadata<T> getMetadata(final Class<T> entityClass) {
         return this.registrar.getMetadata(entityClass);
     }
+
 }
