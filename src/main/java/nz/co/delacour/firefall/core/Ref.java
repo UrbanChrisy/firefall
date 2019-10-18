@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static nz.co.delacour.firefall.core.FirefullService.fir;
+import static nz.co.delacour.firefall.core.FirefallService.fir;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬

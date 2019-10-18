@@ -1,8 +1,6 @@
 package nz.co.delacour.firefall.core;
 
-import lombok.var;
 import nz.co.delacour.firefall.core.delete.Deleter;
-import nz.co.delacour.firefall.core.load.LoadResult;
 import nz.co.delacour.firefall.core.load.Loader;
 import nz.co.delacour.firefall.core.save.Saver;
 
@@ -14,16 +12,16 @@ import java.io.Closeable;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class Firefull implements Closeable {
+public class Firefall implements Closeable {
 
-    private final FirefullFactory firefullFactory;
+    private final FirefallFactory firefallFactory;
 
-    public Firefull(FirefullFactory firefullFactory) {
-        this.firefullFactory = firefullFactory;
+    public Firefall(FirefallFactory firefallFactory) {
+        this.firefallFactory = firefallFactory;
     }
 
-    public FirefullFactory factory() {
-        return firefullFactory;
+    public FirefallFactory factory() {
+        return firefallFactory;
     }
 
     public Loader load() {

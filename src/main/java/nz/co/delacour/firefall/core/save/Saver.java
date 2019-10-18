@@ -1,7 +1,7 @@
 package nz.co.delacour.firefall.core.save;
 
 
-import nz.co.delacour.firefall.core.Firefull;
+import nz.co.delacour.firefall.core.Firefall;
 import nz.co.delacour.firefall.core.HasId;
 
 /**
@@ -12,14 +12,14 @@ import nz.co.delacour.firefall.core.HasId;
 
 public class Saver {
 
-    private final Firefull firefull;
+    private final Firefall firefall;
 
-    public Saver(Firefull firefull) {
-        this.firefull = firefull;
+    public Saver(Firefall firefall) {
+        this.firefall = firefall;
     }
 
-    public Firefull getFirefull() {
-        return firefull;
+    public Firefall getFirefall() {
+        return firefall;
     }
 
     public <T extends HasId> TypeSaver<T> type(Class<T> entityClass) {

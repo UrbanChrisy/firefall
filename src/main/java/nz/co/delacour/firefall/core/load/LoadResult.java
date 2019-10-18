@@ -11,14 +11,12 @@ import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefullException;
 import nz.co.delacour.firefall.core.exceptions.NotFoundException;
 import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
-import nz.co.delacour.firefall.core.save.SaveResult;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
-import static nz.co.delacour.firefall.core.FirefullService.fir;
-import static nz.co.delacour.firefall.core.FirefullService.getMetadata;
+import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -45,7 +43,7 @@ public class LoadResult<T extends HasId> {
 
     public LoadResult(com.google.cloud.firestore.Query query, Class<T> entityClass) {
         this.entityClass = entityClass;
-        this.future = query.get();
+        this.future = query.limit(1).get();
     }
 
     @Nullable
@@ -58,6 +56,10 @@ public class LoadResult<T extends HasId> {
             Object result = this.future.get();
             if (result instanceof QuerySnapshot) {
                 QuerySnapshot querySnapshot = (QuerySnapshot) result;
+                var documents = querySnapshot.getDocuments();
+                if (documents.isEmpty()) {
+                    return null;
+                }
                 documentSnapshot = querySnapshot.getDocuments().get(0);
             } else if (result instanceof DocumentSnapshot) {
                 documentSnapshot = (DocumentSnapshot) result;

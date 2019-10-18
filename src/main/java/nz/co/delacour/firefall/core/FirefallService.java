@@ -12,27 +12,27 @@ import java.io.Closeable;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class FirefullService {
+public class FirefallService {
 
-    private static FirefullFactory factory;
+    private static FirefallFactory factory;
 
-    public FirefullService() {
+    public FirefallService() {
     }
 
     public static void init(Firestore firestore) {
-        init(new FirefullFactory(firestore));
+        init(new FirefallFactory(firestore));
     }
 
-    public static void init(FirefullFactory fact) {
+    public static void init(FirefallFactory fact) {
         factory = fact;
     }
 
-    public static FirefullFactory factory() {
+    public static FirefallFactory factory() {
         Preconditions.checkState(factory != null, "You must call FirefullFactory.init() before using Firefull");
         return factory;
     }
 
-    public static Firefull fir() {
+    public static Firefall fir() {
         return factory().fir();
     }
 

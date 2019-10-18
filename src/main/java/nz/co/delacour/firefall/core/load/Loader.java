@@ -1,6 +1,6 @@
 package nz.co.delacour.firefall.core.load;
 
-import nz.co.delacour.firefall.core.Firefull;
+import nz.co.delacour.firefall.core.Firefall;
 import nz.co.delacour.firefall.core.HasId;
 
 /**
@@ -11,14 +11,14 @@ import nz.co.delacour.firefall.core.HasId;
 
 public class Loader {
 
-    private final Firefull firefull;
+    private final Firefall firefall;
 
-    public Loader(Firefull firefull) {
-        this.firefull = firefull;
+    public Loader(Firefall firefall) {
+        this.firefall = firefall;
     }
 
-    public Firefull getFirefull() {
-        return firefull;
+    public Firefall getFirefall() {
+        return firefall;
     }
 
     public <T extends HasId> LoadType<T> type(Class<T> entityClass) {

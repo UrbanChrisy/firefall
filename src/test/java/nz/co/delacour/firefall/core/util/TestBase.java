@@ -5,7 +5,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.collect.Lists;
 import lombok.var;
-import nz.co.delacour.firefall.core.FirefullService;
+import nz.co.delacour.firefall.core.FirefallService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.io.Closeable;
 import java.io.IOException;
 
-import static nz.co.delacour.firefall.core.FirefullService.fir;
+import static nz.co.delacour.firefall.core.FirefallService.fir;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -32,8 +32,8 @@ public class TestBase {
     public void setup() {
         initMocks(this);
         var options = FirestoreOptions.newBuilder().setProjectId("firefull-tests").build();
-        FirefullService.init(options.getService());
-        this.session = FirefullService.begin();
+        FirefallService.init(options.getService());
+        this.session = FirefallService.begin();
     }
 
 

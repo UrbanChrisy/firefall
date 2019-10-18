@@ -38,7 +38,7 @@ public class Query<T extends HasId> {
         this.entityClass = entityClass;
         this.kind = TypeUtils.getKind(entityClass);
 
-        var collectionQuery = this.loader.getFirefull().factory().getFirestore().collection(this.kind);
+        var collectionQuery = this.loader.getFirefall().factory().getFirestore().collection(this.kind);
         this.collection = collectionQuery;
         this.query = collectionQuery;
     }

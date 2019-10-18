@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
-import static nz.co.delacour.firefall.core.FirefullService.getMetadata;
+import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬

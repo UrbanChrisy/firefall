@@ -1,7 +1,7 @@
 package nz.co.delacour.firefall.core.registrar;
 
 import com.google.common.collect.Maps;
-import nz.co.delacour.firefall.core.FirefullFactory;
+import nz.co.delacour.firefall.core.FirefallFactory;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.util.TypeUtils;
@@ -16,11 +16,11 @@ import java.util.Map;
 
 public class Registrar {
 
-    private final FirefullFactory fact;
+    private final FirefallFactory fact;
 
     protected Map<String, EntityMetadata<?>> byKind = Maps.newHashMap();
 
-    public Registrar(FirefullFactory fact) {
+    public Registrar(FirefallFactory fact) {
         this.fact = fact;
     }
 

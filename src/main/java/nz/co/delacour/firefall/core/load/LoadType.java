@@ -28,7 +28,7 @@ public class LoadType<T extends HasId> extends Query<T> {
         this.loader = loader;
         this.entityClass = entityClass;
         this.kind = TypeUtils.getKind(entityClass);
-        this.collection = this.loader.getFirefull().factory().getFirestore().collection(this.kind);
+        this.collection = this.loader.getFirefall().factory().getFirestore().collection(this.kind);
     }
 
     public Loader getLoader() {

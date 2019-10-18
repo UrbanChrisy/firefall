@@ -2,7 +2,7 @@ package nz.co.delacour.firefall.core.registrar;
 
 import com.google.common.collect.Lists;
 import lombok.Data;
-import nz.co.delacour.firefall.core.FirefullFactory;
+import nz.co.delacour.firefall.core.FirefallFactory;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.OnLoad;
 import nz.co.delacour.firefall.core.annotations.OnSave;
@@ -25,7 +25,7 @@ public class EntityMetadata<T extends HasId> {
 
     private final List<LifecycleMethod> onLoadMethods = Lists.newArrayList();
 
-    public EntityMetadata(FirefullFactory fact, Class<T> entityClass) {
+    public EntityMetadata(FirefallFactory fact, Class<T> entityClass) {
         this.entityClass = entityClass;
 
         for (final Method method : entityClass.getDeclaredMethods()) {

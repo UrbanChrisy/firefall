@@ -13,15 +13,15 @@ import java.util.Deque;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class FirefullFactory {
+public class FirefallFactory {
 
     private final Firestore firestore;
 
     private final Registrar registrar;
 
-    private final ThreadLocal<Deque<Firefull>> stacks = ThreadLocal.withInitial(ArrayDeque::new);
+    private final ThreadLocal<Deque<Firefall>> stacks = ThreadLocal.withInitial(ArrayDeque::new);
 
-    public FirefullFactory(Firestore firestore) {
+    public FirefallFactory(Firestore firestore) {
         this.firestore = firestore;
         this.registrar = new Registrar(this);
     }
@@ -34,8 +34,8 @@ public class FirefullFactory {
         return registrar;
     }
 
-    public Firefull fir() {
-        final Deque<Firefull> stack = stacks.get();
+    public Firefall fir() {
+        final Deque<Firefall> stack = stacks.get();
         if (stack.isEmpty()) {
             throw new IllegalStateException("You have not started a Firefull context. You are probably missing the " +
                     "FirefullFilter. If you are not running in the context of an http request, see the " +
@@ -44,18 +44,18 @@ public class FirefullFactory {
         return stack.getLast();
     }
 
-    public Firefull open() {
-        final Firefull objectify = new Firefull(this);
+    public Firefall open() {
+        final Firefall objectify = new Firefall(this);
         stacks.get().add(objectify);
         return objectify;
     }
 
-    public void close(final Firefull ofy) {
-        final Deque<Firefull> stack = stacks.get();
+    public void close(final Firefall ofy) {
+        final Deque<Firefall> stack = stacks.get();
         if (stack.isEmpty())
             throw new IllegalStateException("You have already destroyed the Firefull context.");
 
-        final Firefull popped = stack.removeLast();
+        final Firefall popped = stack.removeLast();
         assert popped == ofy : "Mismatched Firefull instances; somehow the stack was corrupted";
     }
 

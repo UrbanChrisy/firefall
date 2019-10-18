@@ -5,8 +5,8 @@ import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.util.TestBase;
 import org.junit.jupiter.api.Test;
 
-import static nz.co.delacour.firefall.core.FirefullService.factory;
-import static nz.co.delacour.firefall.core.FirefullService.fir;
+import static nz.co.delacour.firefall.core.FirefallService.factory;
+import static nz.co.delacour.firefall.core.FirefallService.fir;
 import static org.junit.Assert.*;
 
 /**

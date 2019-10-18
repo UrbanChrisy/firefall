@@ -31,7 +31,7 @@ public class TypeDeleter<T extends HasId> {
         this.deleter = deleter;
         this.entityClass = entityClass;
         this.kind = TypeUtils.getKind(entityClass);
-        this.collection = deleter.getFirefull().factory().getFirestore().collection(this.kind);
+        this.collection = deleter.getFirefall().factory().getFirestore().collection(this.kind);
     }
 
     public DeleteResult id(String id) {

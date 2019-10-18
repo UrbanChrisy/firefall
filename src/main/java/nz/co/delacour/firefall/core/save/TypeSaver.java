@@ -27,7 +27,7 @@ public class TypeSaver<T extends HasId> {
         this.saver = saver;
         this.entityClass = entityClass;
         this.kind = TypeUtils.getKind(entityClass);
-        this.collection = saver.getFirefull().factory().getFirestore().collection(this.kind);
+        this.collection = saver.getFirefall().factory().getFirestore().collection(this.kind);
     }
 
     public LoadResult<T> document() {

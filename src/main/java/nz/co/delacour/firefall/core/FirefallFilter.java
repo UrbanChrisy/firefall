@@ -15,11 +15,11 @@ import java.io.IOException;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class FirefullFilter extends AbstractFilter {
+public class FirefallFilter extends AbstractFilter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        try (Closeable closeable = FirefullService.begin()) {
+        try (Closeable closeable = FirefallService.begin()) {
             chain.doFilter(request, response);
         }
     }
