@@ -28,7 +28,7 @@ public class FirefallService {
     }
 
     public static FirefallFactory factory() {
-        Preconditions.checkState(factory != null, "You must call FirefullFactory.init() before using Firefull");
+        Preconditions.checkState(factory != null, "You must call FirefallFactory.init() before using Firefall");
         return factory;
     }
 

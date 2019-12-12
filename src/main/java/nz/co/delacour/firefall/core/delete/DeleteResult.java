@@ -6,9 +6,8 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.WriteResult;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
@@ -39,7 +38,7 @@ public class DeleteResult<T extends HasId> {
         try {
             this.future.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 

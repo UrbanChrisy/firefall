@@ -7,7 +7,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.common.collect.Lists;
 import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -48,7 +48,7 @@ public class LoadResults<T extends HasId> {
 
             return items;
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 

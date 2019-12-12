@@ -6,11 +6,10 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.WriteResult;
 import lombok.var;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.HasId;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
@@ -42,7 +41,7 @@ public class DeleteResults<T extends HasId> {
         try {
             this.future.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 

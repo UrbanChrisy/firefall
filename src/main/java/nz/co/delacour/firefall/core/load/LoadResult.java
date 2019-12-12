@@ -8,7 +8,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.common.base.Strings;
 import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.exceptions.NotFoundException;
 import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 
@@ -70,7 +70,7 @@ public class LoadResult<T extends HasId> {
             id = documentSnapshot.getId();
             entity = documentSnapshot.toObject(this.entityClass);
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
 
         if (entity == null || Strings.isNullOrEmpty(id)) {

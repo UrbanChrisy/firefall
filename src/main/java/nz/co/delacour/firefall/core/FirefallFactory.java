@@ -37,9 +37,9 @@ public class FirefallFactory {
     public Firefall fir() {
         final Deque<Firefall> stack = stacks.get();
         if (stack.isEmpty()) {
-            throw new IllegalStateException("You have not started a Firefull context. You are probably missing the " +
-                    "FirefullFilter. If you are not running in the context of an http request, see the " +
-                    "Firefull.run() method.");
+            throw new IllegalStateException("You have not started a Firefall context. You are probably missing the " +
+                    "FirefallFilter. If you are not running in the context of an http request, see the " +
+                    "Firefall.run() method.");
         }
         return stack.getLast();
     }
@@ -53,10 +53,10 @@ public class FirefallFactory {
     public void close(final Firefall ofy) {
         final Deque<Firefall> stack = stacks.get();
         if (stack.isEmpty())
-            throw new IllegalStateException("You have already destroyed the Firefull context.");
+            throw new IllegalStateException("You have already destroyed the Firefall context.");
 
         final Firefall popped = stack.removeLast();
-        assert popped == ofy : "Mismatched Firefull instances; somehow the stack was corrupted";
+        assert popped == ofy : "Mismatched Firefall instances; somehow the stack was corrupted";
     }
 
     public <T extends HasId> void register(final Class<T> clazz) {

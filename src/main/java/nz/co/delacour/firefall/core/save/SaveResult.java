@@ -7,7 +7,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.WriteResult;
 import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 import nz.co.delacour.firefall.core.util.EntityMapper;
 
@@ -54,7 +54,7 @@ public class SaveResult<T extends HasId> {
         try {
             return this.future.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 

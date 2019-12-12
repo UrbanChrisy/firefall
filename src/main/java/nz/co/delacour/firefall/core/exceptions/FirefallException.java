@@ -6,25 +6,25 @@ package nz.co.delacour.firefall.core.exceptions;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class FirefullException extends RuntimeException {
+public class FirefallException extends RuntimeException {
 
-    public FirefullException() {
+    public FirefallException() {
         super();
     }
 
-    public FirefullException(String message) {
+    public FirefallException(String message) {
         super(message);
     }
 
-    public FirefullException(String message, Throwable cause) {
+    public FirefallException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public FirefullException(Throwable cause) {
+    public FirefallException(Throwable cause) {
         super(cause);
     }
 
-    protected FirefullException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected FirefallException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
