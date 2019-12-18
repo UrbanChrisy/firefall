@@ -3,7 +3,6 @@ package nz.co.delacour.firefall.core.delete;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
-import lombok.var;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 import nz.co.delacour.firefall.core.HasId;
 
@@ -31,7 +30,7 @@ public class TypeDeleter<T extends HasId> {
         this.deleter = deleter;
         this.entityClass = entityClass;
         this.kind = TypeUtils.getKind(entityClass);
-        this.collection = deleter.getFirefull().factory().getFirestore().collection(this.kind);
+        this.collection = deleter.getFirefall().factory().getFirestore().collection(this.kind);
     }
 
     public DeleteResult id(String id) {

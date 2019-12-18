@@ -7,9 +7,8 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,7 @@ public class SaveResults<T extends HasId> {
             this.future.get();
             return Lists.newArrayList(this.map.values());
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 

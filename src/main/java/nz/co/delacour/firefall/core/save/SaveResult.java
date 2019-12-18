@@ -5,9 +5,8 @@ import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.WriteResult;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 import nz.co.delacour.firefall.core.util.EntityMapper;
 
@@ -15,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
-import static nz.co.delacour.firefall.core.FirefullService.getMetadata;
+import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -54,7 +53,7 @@ public class SaveResult<T extends HasId> {
         try {
             return this.future.get();
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 

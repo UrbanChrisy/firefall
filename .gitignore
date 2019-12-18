@@ -4,3 +4,4 @@
 /target
 /settings.xml
 !/src/test/java/nz/co/delacour/firefall/core/util/TestBase.java
+firefall-tests-firebase-adminsdk.json

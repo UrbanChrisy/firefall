@@ -13,7 +13,7 @@ import nz.co.delacour.firefall.core.util.TypeUtils;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class LoadType<T extends HasId> {
+public class LoadType<T extends HasId> extends Query<T> {
 
     private final Loader loader;
 
@@ -24,10 +24,11 @@ public class LoadType<T extends HasId> {
     private final CollectionReference collection;
 
     public LoadType(Loader loader, Class<T> entityClass) {
+        super(loader, entityClass);
         this.loader = loader;
         this.entityClass = entityClass;
         this.kind = TypeUtils.getKind(entityClass);
-        this.collection = this.loader.getFirefull().factory().getFirestore().collection(this.kind);
+        this.collection = this.loader.getFirefall().factory().getFirestore().collection(this.kind);
     }
 
     public Loader getLoader() {

@@ -6,9 +6,8 @@ import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.exceptions.FirefullException;
+import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.Iterator;
@@ -38,7 +37,7 @@ public class Query<T extends HasId> {
         this.entityClass = entityClass;
         this.kind = TypeUtils.getKind(entityClass);
 
-        var collectionQuery = this.loader.getFirefull().factory().getFirestore().collection(this.kind);
+        var collectionQuery = this.loader.getFirefall().factory().getFirestore().collection(this.kind);
         this.collection = collectionQuery;
         this.query = collectionQuery;
     }
@@ -97,7 +96,7 @@ public class Query<T extends HasId> {
         try {
             return this.query.get().get().iterator();
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 
@@ -105,7 +104,7 @@ public class Query<T extends HasId> {
         try {
             return this.query.get().get().size();
         } catch (InterruptedException | ExecutionException e) {
-            throw new FirefullException(e);
+            throw new FirefallException(e);
         }
     }
 
