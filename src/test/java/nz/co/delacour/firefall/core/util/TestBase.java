@@ -1,5 +1,6 @@
 package nz.co.delacour.firefall.core.util;
 
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static nz.co.delacour.firefall.core.FirefallService.fir;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -31,9 +33,17 @@ public class TestBase {
     @BeforeAll
     public void setup() {
         initMocks(this);
-        var options = FirestoreOptions.newBuilder().setProjectId("firefull-tests").build();
-        FirefallService.init(options.getService());
-        this.session = FirefallService.begin();
+        try {
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("firefall-tests-firebase-adminsdk.json");
+            if (stream == null) {
+                return;
+            }
+            FirestoreOptions options = FirestoreOptions.newBuilder().setCredentials(GoogleCredentials.fromStream(stream)).build();
+            FirefallService.init(options.getService());
+            this.session = FirefallService.begin();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
