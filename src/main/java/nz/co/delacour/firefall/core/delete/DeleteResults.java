@@ -5,7 +5,6 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.WriteResult;
-import lombok.var;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.HasId;
 

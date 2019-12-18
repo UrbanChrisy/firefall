@@ -3,7 +3,6 @@ package nz.co.delacour.firefall.core.test;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.util.TestBase;

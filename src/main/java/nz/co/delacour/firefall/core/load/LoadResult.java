@@ -6,7 +6,6 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.common.base.Strings;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.exceptions.NotFoundException;
@@ -25,7 +24,6 @@ import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
  */
 
 public class LoadResult<T extends HasId> {
-
 
     private final Class<T> entityClass;
 

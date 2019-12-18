@@ -5,7 +5,6 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.common.collect.Lists;
-import lombok.var;
 import nz.co.delacour.firefall.core.FirefallService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;

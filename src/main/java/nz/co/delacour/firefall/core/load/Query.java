@@ -6,7 +6,6 @@ import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.util.TypeUtils;

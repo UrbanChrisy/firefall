@@ -1,7 +1,6 @@
 package nz.co.delacour.firefall.core.test;
 
 import com.google.common.collect.Lists;
-import lombok.var;
 import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.util.TestBase;
 import org.junit.jupiter.api.Test;

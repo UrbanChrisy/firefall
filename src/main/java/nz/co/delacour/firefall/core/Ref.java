@@ -5,7 +5,6 @@ import com.google.cloud.firestore.annotation.Exclude;
 import com.google.common.base.Strings;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import nz.co.delacour.firefall.core.load.LoadResult;
 
 import java.io.UnsupportedEncodingException;

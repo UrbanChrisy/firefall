@@ -1,6 +1,5 @@
 package nz.co.delacour.firefall.core.test;
 
-import lombok.var;
 import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.util.TestBase;
 import org.junit.jupiter.api.Test;

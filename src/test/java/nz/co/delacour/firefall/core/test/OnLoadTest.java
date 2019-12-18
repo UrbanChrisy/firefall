@@ -1,7 +1,6 @@
 package nz.co.delacour.firefall.core.test;
 
 import lombok.Data;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.annotations.OnLoad;

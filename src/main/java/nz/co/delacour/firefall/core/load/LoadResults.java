@@ -5,7 +5,6 @@ import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.common.collect.Lists;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 

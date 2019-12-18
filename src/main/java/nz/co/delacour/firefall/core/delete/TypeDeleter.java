@@ -3,7 +3,6 @@ package nz.co.delacour.firefall.core.delete;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
-import lombok.var;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 import nz.co.delacour.firefall.core.HasId;
 

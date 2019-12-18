@@ -7,7 +7,6 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lombok.var;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 
