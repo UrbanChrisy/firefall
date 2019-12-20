@@ -7,10 +7,13 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.common.collect.Lists;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
+import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+
+import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -38,14 +41,21 @@ public class LoadResults<T extends HasId> {
                 return Lists.newArrayList();
             }
 
-            List<T> items = Lists.newArrayList();
+            List<T> entities = Lists.newArrayList();
             for (QueryDocumentSnapshot document : snapshot.getDocuments()) {
                 T t = document.toObject(entityClass);
                 t.setId(document.getId());
-                items.add(t);
+                entities.add(t);
             }
 
-            return items;
+            var onLoadMethods = getOnLoadMethods();
+            for (T entity : entities) {
+                for (LifecycleMethod onLoadMethod : onLoadMethods) {
+                    onLoadMethod.execute(entity);
+                }
+            }
+
+            return entities;
         } catch (InterruptedException | ExecutionException e) {
             throw new FirefallException(e);
         }
@@ -54,5 +64,13 @@ public class LoadResults<T extends HasId> {
     public LoadResults<T> listener(Runnable runnable, Executor executor) {
         this.future.addListener(runnable, executor);
         return this;
+    }
+
+    private List<LifecycleMethod> getOnLoadMethods() {
+        var metadata = getMetadata(entityClass);
+        if (metadata == null) {
+            return Lists.newArrayList();
+        }
+        return metadata.getOnLoadMethods();
     }
 }

@@ -9,11 +9,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
+import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+
+import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -57,7 +60,16 @@ public class SaveResults<T extends HasId> {
     public List<T> now() {
         try {
             this.future.get();
-            return Lists.newArrayList(this.map.values());
+            List<T> entities = Lists.newArrayList(this.map.values());
+
+            var onSaveMethods = getOnSaveMethods();
+            for (T entity : entities) {
+                for (LifecycleMethod onSaveMethod : onSaveMethods) {
+                    onSaveMethod.execute(entity);
+                }
+            }
+
+            return entities;
         } catch (InterruptedException | ExecutionException e) {
             throw new FirefallException(e);
         }
@@ -70,6 +82,15 @@ public class SaveResults<T extends HasId> {
 
     public List<DocumentReference> refs() {
         return Lists.newArrayList(this.map.keySet());
+    }
+
+
+    private List<LifecycleMethod> getOnSaveMethods() {
+        var metadata = getMetadata(entityClass);
+        if (metadata == null) {
+            return Lists.newArrayList();
+        }
+        return metadata.getOnSaveMethods();
     }
 
 }

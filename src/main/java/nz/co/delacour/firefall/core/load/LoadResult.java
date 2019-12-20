@@ -97,8 +97,11 @@ public class LoadResult<T extends HasId> {
 
     private void executeOnLoad(T entity) {
         var metadata = getMetadata(entityClass);
-        var onLoadMethods = metadata.getOnLoadMethods();
+        if (metadata == null) {
+            return;
+        }
 
+        var onLoadMethods = metadata.getOnLoadMethods();
         if (onLoadMethods.isEmpty()) {
             return;
         }

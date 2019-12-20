@@ -3,6 +3,9 @@ package nz.co.delacour.firefall.core.save;
 
 import nz.co.delacour.firefall.core.Firefall;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
+
+import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -25,5 +28,4 @@ public class Saver {
     public <T extends HasId> TypeSaver<T> type(Class<T> entityClass) {
         return new TypeSaver<>(this, entityClass);
     }
-
 }

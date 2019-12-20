@@ -77,8 +77,11 @@ public class SaveResult<T extends HasId> {
 
     private void executeOnSave(T entity) {
         var metadata = getMetadata(entityClass);
-        var onSaveMethods = metadata.getOnSaveMethods();
+        if (metadata == null) {
+            return;
+        }
 
+        var onSaveMethods = metadata.getOnSaveMethods();
         if (onSaveMethods.isEmpty()) {
             return;
         }
