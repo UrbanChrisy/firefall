@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
  */
 
 @Slf4j
-public class Query<T extends HasId> {
+public class Query<T extends HasId<T>> {
 
     private final Loader loader;
 
@@ -66,6 +66,16 @@ public class Query<T extends HasId> {
 
     public Query<T> order(FieldPath order) {
         this.query = this.query.orderBy(order);
+        return this;
+    }
+
+    public Query<T> order(String order, com.google.cloud.firestore.Query.Direction direction) {
+        this.query = this.query.orderBy(order, direction);
+        return this;
+    }
+
+    public Query<T> order(FieldPath order, com.google.cloud.firestore.Query.Direction direction) {
+        this.query = this.query.orderBy(order, direction);
         return this;
     }
 
