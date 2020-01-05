@@ -18,7 +18,7 @@ import java.util.concurrent.Executor;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class DeleteResults<T extends HasId> {
+public class DeleteResults<T extends HasId<T>> {
 
     private final ApiFuture<List<WriteResult>> future;
 

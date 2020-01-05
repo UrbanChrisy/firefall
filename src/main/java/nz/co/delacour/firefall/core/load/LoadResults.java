@@ -21,7 +21,7 @@ import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class LoadResults<T extends HasId> {
+public class LoadResults<T extends HasId<T>> {
 
     private final Class<T> entityClass;
 

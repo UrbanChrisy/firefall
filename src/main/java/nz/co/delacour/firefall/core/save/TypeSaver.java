@@ -13,7 +13,7 @@ import java.util.List;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class TypeSaver<T extends HasId> {
+public class TypeSaver<T extends HasId<T>> {
 
     private final Saver saver;
 

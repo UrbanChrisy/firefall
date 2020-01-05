@@ -22,7 +22,7 @@ import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class SaveResult<T extends HasId> {
+public class SaveResult<T extends HasId<T>> {
 
     private final T entity;
 

@@ -24,7 +24,7 @@ public class Registrar {
         this.fact = fact;
     }
 
-    public <T extends HasId> void register(Class<T> clazz) {
+    public <T extends HasId<T>> void register(Class<T> clazz) {
         if (!TypeUtils.isDeclaredAnnotationPresent(clazz, Entity.class)) {
             throw new IllegalArgumentException(clazz + " must be annotated with @Entity");
         }
@@ -40,11 +40,11 @@ public class Registrar {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends HasId> EntityMetadata<T> getMetadata(String kind) {
+    public <T extends HasId<T>> EntityMetadata<T> getMetadata(String kind) {
         return (EntityMetadata<T>) this.byKind.get(kind);
     }
 
-    public <T extends HasId> EntityMetadata<T> getMetadata(Class<T> clazz) {
+    public <T extends HasId<T>> EntityMetadata<T> getMetadata(Class<T> clazz) {
         return getMetadata(TypeUtils.getKind(clazz));
     }
 }

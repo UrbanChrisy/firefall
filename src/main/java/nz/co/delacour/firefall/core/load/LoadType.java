@@ -13,7 +13,7 @@ import nz.co.delacour.firefall.core.util.TypeUtils;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class LoadType<T extends HasId> extends Query<T> {
+public class LoadType<T extends HasId<T>> extends Query<T> {
 
     private final Loader loader;
 

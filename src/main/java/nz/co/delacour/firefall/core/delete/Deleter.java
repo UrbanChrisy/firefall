@@ -19,8 +19,8 @@ public class Deleter {
         this.firefall = firefall;
     }
 
-    public <T extends HasId> TypeDeleter<T> type(Class<T> entityClass) {
-        return new TypeDeleter<T>(this, entityClass);
+    public <T extends HasId<T>> TypeDeleter<T> type(Class<T> entityClass) {
+        return new TypeDeleter(this, entityClass);
     }
 
 }

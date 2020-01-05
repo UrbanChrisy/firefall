@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @Data
-public class EntityMetadata<T extends HasId> {
+public class EntityMetadata<T extends HasId<T>> {
 
     private final Class<T> entityClass;
 

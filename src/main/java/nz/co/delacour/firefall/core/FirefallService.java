@@ -40,15 +40,15 @@ public class FirefallService {
         return factory().open();
     }
 
-    public static void register(Class<? extends HasId> clazz) {
+    public static <T extends HasId<T>> void register(Class<T> clazz) {
         factory().register(clazz);
     }
 
-    public static <T extends HasId> EntityMetadata<T> getMetadata(final String kind) {
+    public static <T extends HasId<T>> EntityMetadata<T> getMetadata(final String kind) {
         return factory().getMetadata(kind);
     }
 
-    public static <T extends HasId> EntityMetadata<T> getMetadata(final Class<T> entityClass) {
+    public static <T extends HasId<T>> EntityMetadata<T> getMetadata(final Class<T> entityClass) {
         return factory().getMetadata(entityClass);
     }
 

@@ -59,15 +59,15 @@ public class FirefallFactory {
         assert popped == ofy : "Mismatched Firefall instances; somehow the stack was corrupted";
     }
 
-    public <T extends HasId> void register(final Class<T> clazz) {
+    public <T extends HasId<T>> void register(final Class<T> clazz) {
         this.registrar.register(clazz);
     }
 
-    public <T extends HasId> EntityMetadata<T> getMetadata(final String kind) {
+    public <T extends HasId<T>> EntityMetadata<T> getMetadata(final String kind) {
         return this.registrar.getMetadata(kind);
     }
 
-    public <T extends HasId> EntityMetadata<T> getMetadata(final Class<T> entityClass) {
+    public <T extends HasId<T>> EntityMetadata<T> getMetadata(final Class<T> entityClass) {
         return this.registrar.getMetadata(entityClass);
     }
 

@@ -15,7 +15,7 @@ import nz.co.delacour.firefall.core.HasId;
 
 public class EntityMapper {
 
-    public static <T extends HasId> T map(Class<T> entityClass, DocumentSnapshot documentSnapshot) {
+    public static <T extends HasId<T>> T map(Class<T> entityClass, DocumentSnapshot documentSnapshot) {
         if (documentSnapshot == null) {
             return null;
         }
@@ -30,7 +30,7 @@ public class EntityMapper {
         return t;
     }
 
-    public static <T extends HasId> MappedEntity<T, DocumentReference> map(T t, CollectionReference collection) {
+    public static <T extends HasId<T>> MappedEntity<T, DocumentReference> map(T t, CollectionReference collection) {
         if (t == null) {
             return null;
         }
@@ -47,7 +47,7 @@ public class EntityMapper {
     }
 
     @Data
-    public static class MappedEntity<T extends HasId, U> {
+    public static class MappedEntity<T extends HasId<T>, U> {
         private T entity;
         private U type;
 

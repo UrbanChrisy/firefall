@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class TypeDeleter<T extends HasId> {
+public class TypeDeleter<T extends HasId<T>> {
 
     private final Deleter deleter;
 

@@ -21,7 +21,7 @@ public class Loader {
         return firefall;
     }
 
-    public <T extends HasId> LoadType<T> type(Class<T> entityClass) {
+    public <T extends HasId<T>> LoadType<T> type(Class<T> entityClass) {
         return new LoadType<>(this, entityClass);
     }
 
