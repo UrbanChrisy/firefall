@@ -4,7 +4,7 @@
 Firefall has a very similar api to Objectify, but obviously it is for Firestore and not the Datastore. 
 
 ## Getting Started
-*Firefall lets you persist, retrieve, delete, and query your own typed objects.
+* Firefall lets you persist, retrieve, delete, and query your own typed objects.
 
 
 ```java
