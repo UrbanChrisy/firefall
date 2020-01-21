@@ -36,14 +36,6 @@ public class Ref<T extends HasId<T>> {
         this.reference = fir().load().type(entityClass).ref(id);
     }
 
-    public Ref(DocumentReference reference) {
-        if (reference == null) {
-            return;
-        }
-
-        this.reference = reference;
-    }
-
     @Exclude
     public String getId() {
 
@@ -62,10 +54,6 @@ public class Ref<T extends HasId<T>> {
     @Exclude
     public LoadResult<T> load(Class<T> entityClass) {
         return new LoadResult<T>(this.reference, entityClass);
-    }
-
-    public static <T extends HasId<T>> Ref<T> create(DocumentReference reference) {
-        return new Ref<T>(reference);
     }
 
     public static <T extends HasId<T>> Ref<T> create(Class<T> entityClass, String id) {
