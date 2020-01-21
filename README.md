@@ -1,7 +1,35 @@
 # Firefall
-Objectify inspired Google Firestore interface wrapper
+### Objectify inspired Google Firestore interface wrapper
+
+Firefall has a very similar api to Objectify, but obviously it is for Firestore and not the Datastore. 
+
+##Getting Started
+*Firefall lets you persist, retrieve, delete, and query your own typed objects.
 
 
-## This library is still in active development, so I would highly suggest that you do not use this in a production version of you app. As the API is probably going to change.
+```java
+@Entity
+class Car extends HasId<Car> {
 
-This README is also a WIP, same with docs. :)
+    public Car() {
+        super(Car.class);
+    }
+
+    String color;
+
+}
+
+Card car = new Car();
+car.setId("ids_are_always_strings");
+car.setColor("Red");
+
+fir().save().type(Car.class).entity(new Car()).now();
+Car c = fir().load().type(Car.class).id("ids_are_always_strings").now();
+fir().delete().type(Basic.class).entity(c).now();
+```
+
+#Documentation
+Full documentation is available in the Wiki, which can be found here.
+
+#Downloads
+Firefall is released to Maven. To get the latest version, click [here](https://search.maven.org/artifact/nz.co.delacour/firefall-core).
