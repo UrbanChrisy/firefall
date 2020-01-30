@@ -33,59 +33,59 @@ public class TypeDeleter<T extends HasId<T>> {
         this.collection = deleter.getFirefall().factory().getFirestore().collection(this.kind);
     }
 
-    public DeleteResult id(String id) {
+    public DeleteResult<T> id(String id) {
         var reference = this.collection.document(id);
         return this.document(reference);
     }
 
-    public DeleteResult entity(T entity) {
+    public DeleteResult<T> entity(T entity) {
         var reference = this.collection.document(entity.getId());
         return this.document(reference);
     }
 
-    public DeleteResult document(DocumentReference reference) {
+    public DeleteResult<T> document(DocumentReference reference) {
         return new DeleteResult(reference, null);
     }
 
-    public DeleteResult id(String id, Precondition options) {
+    public DeleteResult<T> id(String id, Precondition options) {
         var reference = this.collection.document(id);
         return this.document(reference, options);
     }
 
-    public DeleteResult entity(T entity, Precondition options) {
+    public DeleteResult<T> entity(T entity, Precondition options) {
         var reference = this.collection.document(entity.getId());
         return this.document(reference, options);
     }
 
-    public DeleteResult document(DocumentReference reference, Precondition options) {
-        return new DeleteResult(reference, options);
+    public DeleteResult<T> document(DocumentReference reference, Precondition options) {
+        return new DeleteResult<>(reference, options);
     }
 
-    public DeleteResults ids(List<String> entities) {
+    public DeleteResults<T> ids(List<String> entities) {
         var references = entities.stream().map((id) -> this.collection.document(id)).collect(Collectors.toList());
         return this.documents(references);
     }
 
-    public DeleteResults entities(List<T> entities) {
+    public DeleteResults<T> entities(List<T> entities) {
         var references = entities.stream().map(HasId::getId).filter(Objects::nonNull).map(this.collection::document).collect(Collectors.toList());
         return this.documents(references);
     }
 
-    public DeleteResults documents(List<DocumentReference> references) {
-        return new DeleteResults(references, this.collection, null);
+    public DeleteResults<T> documents(List<DocumentReference> references) {
+        return new DeleteResults<>(references, this.collection, null);
     }
 
-    public DeleteResults ids(List<String> entities, Precondition options) {
+    public DeleteResults<T> ids(List<String> entities, Precondition options) {
         var references = entities.stream().map((id) -> this.collection.document(id)).collect(Collectors.toList());
         return this.documents(references, options);
     }
 
-    public DeleteResults entities(List<T> entities, Precondition options) {
+    public DeleteResults<T> entities(List<T> entities, Precondition options) {
         var references = entities.stream().map(HasId::getId).filter(Objects::nonNull).map(this.collection::document).collect(Collectors.toList());
         return this.documents(references, options);
     }
 
-    public DeleteResults documents(List<DocumentReference> references, Precondition options) {
-        return new DeleteResults(references, this.collection, options);
+    public DeleteResults<T> documents(List<DocumentReference> references, Precondition options) {
+        return new DeleteResults<>(references, this.collection, options);
     }
 }
