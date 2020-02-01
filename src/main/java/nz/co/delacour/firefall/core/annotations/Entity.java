@@ -17,14 +17,5 @@ public @interface Entity {
 
     String name() default "";
 
-    Class<? extends HasId<?>> parent() default DEFAULT.class;
-
-
-    final class DEFAULT extends HasId<DEFAULT> {
-        public DEFAULT() {
-            super(DEFAULT.class);
-        }
-    }
-
 }
 

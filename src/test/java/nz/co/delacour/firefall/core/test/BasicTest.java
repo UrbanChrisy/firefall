@@ -1,7 +1,6 @@
 package nz.co.delacour.firefall.core.test;
 
 import com.google.common.collect.Lists;
-import nz.co.delacour.firefall.core.SubCollection;
 import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.entities.BasicSubCollectionEntity;
 import nz.co.delacour.firefall.core.util.TestBase;
