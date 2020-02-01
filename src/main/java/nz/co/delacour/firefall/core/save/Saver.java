@@ -18,11 +18,8 @@ public class Saver {
 
     private final Firefall firefall;
 
-    private final DocumentReference parent;
-
-    public Saver(Firefall firefall, DocumentReference parent) {
+    public Saver(Firefall firefall) {
         this.firefall = firefall;
-        this.parent = parent;
     }
 
     public Firefall getFirefall() {
@@ -30,6 +27,6 @@ public class Saver {
     }
 
     public <T extends HasId<T>> TypeSaver<T> type(Class<T> entityClass) {
-        return new TypeSaver<>(this, entityClass, parent);
+        return new TypeSaver<>(this, entityClass);
     }
 }

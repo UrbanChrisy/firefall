@@ -3,6 +3,8 @@ package nz.co.delacour.firefall.core.save;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.Ref;
+import nz.co.delacour.firefall.core.delete.Deleter;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.List;
@@ -15,13 +17,24 @@ import java.util.List;
 
 public class TypeSaver<T extends HasId<T>> {
 
+    private final Saver saver;
+
     private final Class<T> entityClass;
 
     private CollectionReference collection;
 
+    public TypeSaver(Saver saver, Class<T> entityClass) {
+        this(saver, entityClass, null);
+    }
+
     public TypeSaver(Saver saver, Class<T> entityClass, DocumentReference parent) {
+        this.saver = saver;
         this.entityClass = entityClass;
         this.collection = TypeUtils.getCollection(saver.getFirefall().factory().getFirestore(), entityClass, parent);
+    }
+
+    public TypeSaver<T> parent(Ref<?> ref) {
+        return new TypeSaver<>(this.saver, this.entityClass, ref.getReference());
     }
 
     public SaveResult<T> entity(T t) {

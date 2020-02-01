@@ -17,15 +17,8 @@ public class Firefall implements Closeable {
 
     private final FirefallFactory firefallFactory;
 
-    private final DocumentReference parent;
-
-    public Firefall(FirefallFactory firefallFactory, DocumentReference parent) {
+    public Firefall(FirefallFactory firefallFactory) {
         this.firefallFactory = firefallFactory;
-        this.parent = parent;
-    }
-
-    public <T extends HasId<T>> Firefall parent(Ref<T> ref) {
-        return new Firefall(this.firefallFactory, ref.getReference());
     }
 
     public FirefallFactory factory() {
@@ -33,15 +26,15 @@ public class Firefall implements Closeable {
     }
 
     public Loader load() {
-        return new Loader(this, parent);
+        return new Loader(this);
     }
 
     public Saver save() {
-        return new Saver(this, parent);
+        return new Saver(this);
     }
 
     public Deleter delete() {
-        return new Deleter(this, parent);
+        return new Deleter(this);
     }
 
     @Override

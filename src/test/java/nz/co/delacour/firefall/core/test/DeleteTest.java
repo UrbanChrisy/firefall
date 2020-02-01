@@ -50,7 +50,7 @@ public class DeleteTest extends TestBase {
         BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
         basicSubCollectionEntity1.setTestString("testString");
 
-        var savedSubCollectionEntity = fir().parent(savedEntity.ref()).save().type(BasicSubCollectionEntity.class).entity(basicSubCollectionEntity1).now();
+        var savedSubCollectionEntity = fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity1).now();
         assertNotNull(savedSubCollectionEntity);
         assertNotNull(savedSubCollectionEntity.getId());
 
@@ -59,7 +59,7 @@ public class DeleteTest extends TestBase {
         var loadEntity = fir().load().type(Basic.class).id(basic.getId()).now();
         assertNull(loadEntity);
 
-        var loadSubEntity = fir().parent(savedEntity.ref()).load().type(BasicSubCollectionEntity.class).id(savedSubCollectionEntity.getId()).now();
+        var loadSubEntity = fir().load().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).id(savedSubCollectionEntity.getId()).now();
         assertNotNull(loadSubEntity);
         assertNotNull(loadSubEntity.getId());
 

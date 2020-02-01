@@ -74,7 +74,6 @@ public class SaveResult<T extends HasId<T>> {
         return this;
     }
 
-
     private void executeOnSave(T entity) {
         var metadata = getMetadata(entityClass);
         if (metadata == null) {

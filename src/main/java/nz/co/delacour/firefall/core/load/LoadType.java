@@ -13,8 +13,16 @@ import nz.co.delacour.firefall.core.Ref;
 
 public class LoadType<T extends HasId<T>> extends Query<T> {
 
+    public LoadType(Loader loader, Class<T> entityClass) {
+        this(loader, entityClass, null);
+    }
+
     public LoadType(Loader loader, Class<T> entityClass, DocumentReference parent) {
         super(loader, entityClass, parent);
+    }
+
+    public LoadType<T> parent(Ref<?> ref) {
+        return new LoadType<>(this.loader, this.entityClass, ref.getReference());
     }
 
     public Loader getLoader() {

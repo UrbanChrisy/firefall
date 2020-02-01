@@ -45,9 +45,9 @@ public class FirefallFactory {
     }
 
     public Firefall open() {
-        final Firefall objectify = new Firefall(this, null);
-        stacks.get().add(objectify);
-        return objectify;
+        final Firefall firefall = new Firefall(this);
+        stacks.get().add(firefall);
+        return firefall;
     }
 
     public void close(final Firefall ofy) {

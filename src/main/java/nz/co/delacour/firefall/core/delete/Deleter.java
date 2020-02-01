@@ -16,15 +16,12 @@ public class Deleter {
 
     private final Firefall firefall;
 
-    private final DocumentReference parent;
-
-    public Deleter(Firefall firefall, DocumentReference parent) {
+    public Deleter(Firefall firefall) {
         this.firefall = firefall;
-        this.parent = parent;
     }
 
     public <T extends HasId<T>> TypeDeleter<T> type(Class<T> entityClass) {
-        return new TypeDeleter<>(this, entityClass, parent);
+        return new TypeDeleter<>(this, entityClass);
     }
 
 }

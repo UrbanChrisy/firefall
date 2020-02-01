@@ -3,6 +3,8 @@ package nz.co.delacour.firefall.core.delete;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.common.collect.Lists;
+import nz.co.delacour.firefall.core.Ref;
+import nz.co.delacour.firefall.core.load.LoadType;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 import nz.co.delacour.firefall.core.HasId;
 
@@ -18,10 +20,24 @@ import java.util.stream.Collectors;
 
 public class TypeDeleter<T extends HasId<T>> {
 
-    private CollectionReference collection;
+    private final Deleter deleter;
+
+    private final Class<T> entityClass;
+
+    private final CollectionReference collection;
+
+    public TypeDeleter(Deleter deleter, Class<T> entityClass) {
+       this(deleter, entityClass, null);
+    }
 
     public TypeDeleter(Deleter deleter, Class<T> entityClass, DocumentReference parent) {
+        this.deleter = deleter;
+        this.entityClass = entityClass;
         this.collection = TypeUtils.getCollection(deleter.getFirefall().factory().getFirestore(), entityClass, parent);
+    }
+
+    public TypeDeleter<T> parent(Ref<?> ref) {
+        return new TypeDeleter<>(this.deleter, this.entityClass, ref.getReference());
     }
 
     public DeleteResult<T> id(String id) {

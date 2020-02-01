@@ -46,20 +46,6 @@ public class Query<T extends HasId<T>> {
         this.query = collectionQuery;
     }
 
-    public List<LifecycleMethod> getOnLoadMethods() {
-        var metadata = getMetadata(entityClass);
-        if (metadata == null) {
-            return Lists.newArrayList();
-        }
-
-        var onLoadMethods = metadata.getOnLoadMethods();
-        if (onLoadMethods == null) {
-            return Lists.newArrayList();
-        }
-
-        return onLoadMethods;
-    }
-
     public CollectionReference getCollection() {
         return collection;
     }

@@ -90,6 +90,7 @@ public class BasicTest extends TestBase {
         assertNotNull(entity2.getId());
         assertEquals(entity2.getId(), savedEntity.getId());
         assertEquals(entity2.getTestString(), saved2xEntity.getTestString());
+
     }
 
     @Test
@@ -108,7 +109,7 @@ public class BasicTest extends TestBase {
         basicSubCollectionEntity.setTestString("testString");
 
 
-        var savedSubCollectionEntity1 = fir().parent(savedEntity.ref()).save().type(BasicSubCollectionEntity.class).entity(basicSubCollectionEntity).now();
+        var savedSubCollectionEntity1 = fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity).now();
         assertNotNull(savedSubCollectionEntity1);
         assertNotNull(savedSubCollectionEntity1.getId());
 
@@ -129,12 +130,12 @@ public class BasicTest extends TestBase {
         BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
         basicSubCollectionEntity1.setTestString("testString");
 
-        var savedSubCollectionEntity = fir().parent(savedEntity.ref()).save().type(BasicSubCollectionEntity.class).entity(basicSubCollectionEntity1).now();
+        var savedSubCollectionEntity =  fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity1).now();
         assertNotNull(savedSubCollectionEntity);
         assertNotNull(savedSubCollectionEntity.getId());
 
 
-        var loadSubEntity = fir().parent(savedEntity.ref()).load().type(BasicSubCollectionEntity.class).id(savedSubCollectionEntity.getId()).now();
+        var loadSubEntity = fir().load().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).id(savedSubCollectionEntity.getId()).now();
         assertNotNull(loadSubEntity);
         assertNotNull(loadSubEntity.getId());
         assertEquals(savedSubCollectionEntity.getId(), loadSubEntity.getId());
