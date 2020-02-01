@@ -1,7 +1,7 @@
 # Firefall
 ### Objectify inspired Google Firestore interface wrapper
 
-Firefall has a very similar api to Objectify, but obviously it is for Firestore and not the Datastore. 
+Firefall has a very similar api to Objectify, but not identical - yet?
 
 ## Getting Started
 * Firefall lets you persist, retrieve, delete, and query your own typed objects.
