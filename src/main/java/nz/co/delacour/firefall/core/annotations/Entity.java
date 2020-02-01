@@ -1,7 +1,5 @@
 package nz.co.delacour.firefall.core.annotations;
 
-import nz.co.delacour.firefall.core.HasId;
-
 import java.lang.annotation.*;
 
 /**

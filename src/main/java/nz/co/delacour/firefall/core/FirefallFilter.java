@@ -23,4 +23,5 @@ public class FirefallFilter extends AbstractFilter {
             chain.doFilter(request, response);
         }
     }
+
 }

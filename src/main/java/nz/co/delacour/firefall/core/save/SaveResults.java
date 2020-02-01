@@ -84,7 +84,6 @@ public class SaveResults<T extends HasId<T>> {
         return Lists.newArrayList(this.map.keySet());
     }
 
-
     private List<LifecycleMethod> getOnSaveMethods() {
         var metadata = getMetadata(entityClass);
         if (metadata == null) {
