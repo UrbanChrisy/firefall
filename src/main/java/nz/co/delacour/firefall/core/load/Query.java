@@ -95,11 +95,11 @@ public class Query<T extends HasId<T>> {
     }
 
     public LoadResult<T> first() {
-        return new LoadResult<>(this, this.query.limit(1), entityClass);
+        return new LoadResult<>(this.query.limit(1), entityClass);
     }
 
     public LoadResults<T> list() {
-        return new LoadResults<>(this, this.query, entityClass);
+        return new LoadResults<>(this.query, entityClass);
     }
 
     public Query<T> startAt(DocumentSnapshot documentSnapshot) {
