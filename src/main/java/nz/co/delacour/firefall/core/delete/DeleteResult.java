@@ -2,12 +2,15 @@ package nz.co.delacour.firefall.core.delete;
 
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
 import com.google.cloud.firestore.WriteResult;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
@@ -21,7 +24,11 @@ public class DeleteResult<T extends HasId<T>> {
 
     private final ApiFuture<WriteResult> future;
 
-    public DeleteResult(DocumentReference reference, Precondition options) {
+    public DeleteResult(TypeDeleter<T> typeDeleter, DocumentReference reference, Precondition options) {
+        this(typeDeleter, reference, options, true);
+    }
+
+    public DeleteResult(TypeDeleter<T> typeDeleter, DocumentReference reference, Precondition options, boolean deleteSubCollections) {
         if (reference == null) {
             this.future = ApiFutures.immediateFuture(null);
         } else {
@@ -31,6 +38,10 @@ public class DeleteResult<T extends HasId<T>> {
             }
 
             this.future = reference.delete(options);
+
+            if (deleteSubCollections) {
+                typeDeleter.recursiveDelete(reference.listCollections());
+            }
         }
     }
 

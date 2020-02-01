@@ -3,6 +3,7 @@ package nz.co.delacour.firefall.core.entities;
 import lombok.Data;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
+import nz.co.delacour.firefall.core.annotations.SubCollectionEntity;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -11,13 +12,13 @@ import nz.co.delacour.firefall.core.annotations.Entity;
  */
 
 @Data
-@Entity
-public class Basic extends HasId<Basic> {
+@Entity(parent = Basic.class)
+public class BasicSubCollectionEntity extends HasId<BasicSubCollectionEntity> {
 
     private String testString;
 
-    public Basic() {
-        super(Basic.class);
+    public BasicSubCollectionEntity() {
+        super(BasicSubCollectionEntity.class);
     }
-    
+
 }

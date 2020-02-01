@@ -49,12 +49,18 @@ public class TestBase {
     @AfterEach
     public void afterEach() {
         var collections = Lists.newArrayList(fir().factory().getFirestore().listCollections());
+        recursiveDelete(collections);
+    }
+
+    public void recursiveDelete(Iterable<CollectionReference> collections) {
         for (CollectionReference collection : collections) {
             var documents = collection.listDocuments();
             for (DocumentReference document : documents) {
                 try {
                     document.delete().get();
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) {
+                }
+                recursiveDelete(document.listCollections());
             }
         }
     }
