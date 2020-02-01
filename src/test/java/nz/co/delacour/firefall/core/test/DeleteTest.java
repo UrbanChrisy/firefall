@@ -54,16 +54,14 @@ public class DeleteTest extends TestBase {
         assertNotNull(savedSubCollectionEntity);
         assertNotNull(savedSubCollectionEntity.getId());
 
-
-        var loadSubEntity = fir().parent(savedEntity.ref()).load().type(BasicSubCollectionEntity.class).id(savedSubCollectionEntity.getId()).now();
-        assertNotNull(loadSubEntity);
-        assertNotNull(loadSubEntity.getId());
-        assertEquals(savedSubCollectionEntity.getId(), loadSubEntity.getId());
-
         fir().delete().type(Basic.class).entity(basic).now();
 
         var loadEntity = fir().load().type(Basic.class).id(basic.getId()).now();
         assertNull(loadEntity);
+
+        var loadSubEntity = fir().parent(savedEntity.ref()).load().type(BasicSubCollectionEntity.class).id(savedSubCollectionEntity.getId()).now();
+        assertNotNull(loadSubEntity);
+        assertNotNull(loadSubEntity.getId());
 
     }
 }
