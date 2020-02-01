@@ -37,7 +37,7 @@
 
     <groupId>nz.co.delacour</groupId>
     <artifactId>firefall-core</artifactId>
-    <version>0.0.14</version>
+    <version>0.0.13-Beta1</version>
     <packaging>jar</packaging>
 
     <name>Firefall</name>
@@ -199,8 +199,8 @@
                             <owner>UrbanChrisy</owner>
                             <repository>firefall</repository>
                             <server>github-oauth</server>
-                            <tagName>v${version}</tagName>
-                            <name>v${version}</name>
+                            <tagName>${version}</tagName>
+                            <name>${version}</name>
                             <targetCommitish>master</targetCommitish>
 <!--                            <releaseNotes>src/main/resources/release-notes-example.md</releaseNotes>-->
 <!--                            <assets>-->

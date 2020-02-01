@@ -1,0 +1,14 @@
+{
+  "name": "firefall",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "https://UrbanChrisy@github.com/dlcgl/firefall.git",
+  "author": "chris@delacour.co.nz",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "predeploy": "mvn build-helper:parse-version versions:set -DnewVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion}",
+    "deploy": "mvn clean deploy",
+    "postdeploy": "mvn github-release:github-release"
+  }
+}
