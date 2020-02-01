@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FirestoreOptions;
+import com.google.cloud.firestore.WriteBatch;
 import com.google.common.collect.Lists;
 import nz.co.delacour.firefall.core.FirefallService;
 import org.junit.jupiter.api.AfterAll;
@@ -55,12 +56,10 @@ public class TestBase {
     public void recursiveDelete(Iterable<CollectionReference> collections) {
         for (CollectionReference collection : collections) {
             var documents = collection.listDocuments();
+
             for (DocumentReference document : documents) {
-                try {
-                    document.delete().get();
-                } catch (Exception ignore) {
-                }
                 recursiveDelete(document.listCollections());
+                document.delete();
             }
         }
     }

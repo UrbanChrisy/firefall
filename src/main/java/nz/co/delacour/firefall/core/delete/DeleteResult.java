@@ -25,10 +25,6 @@ public class DeleteResult<T extends HasId<T>> {
     private final ApiFuture<WriteResult> future;
 
     public DeleteResult(TypeDeleter<T> typeDeleter, DocumentReference reference, Precondition options) {
-        this(typeDeleter, reference, options, true);
-    }
-
-    public DeleteResult(TypeDeleter<T> typeDeleter, DocumentReference reference, Precondition options, boolean deleteSubCollections) {
         if (reference == null) {
             this.future = ApiFutures.immediateFuture(null);
         } else {
@@ -38,10 +34,6 @@ public class DeleteResult<T extends HasId<T>> {
             }
 
             this.future = reference.delete(options);
-
-            if (deleteSubCollections) {
-                typeDeleter.recursiveDelete(reference.listCollections());
-            }
         }
     }
 

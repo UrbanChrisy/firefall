@@ -1,8 +1,8 @@
 package nz.co.delacour.firefall.core.delete;
 
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Precondition;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
+import com.google.common.collect.Lists;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 import nz.co.delacour.firefall.core.HasId;
 
@@ -78,14 +78,7 @@ public class TypeDeleter<T extends HasId<T>> {
         return new DeleteResults<>(references, this.collection, options);
     }
 
-    public void recursiveDelete(Iterable<CollectionReference> collections) {
-        for (CollectionReference collection : collections) {
-            var documents = collection.listDocuments();
-            for (DocumentReference document : documents) {
-                //TODO Return APIFutures back either one by one or all together, yet to be determined.
-                recursiveDelete(document.listCollections());//Do the recursion before the actual deletion
-                document.delete();
-            }
-        }
+    public CollectionReference getCollection() {
+        return collection;
     }
 }

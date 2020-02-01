@@ -32,5 +32,7 @@ public class TypeSaver<T extends HasId<T>> {
         return new SaveResults<>(items, entityClass, this.collection);
     }
 
-
+    public CollectionReference getCollection() {
+        return collection;
+    }
 }

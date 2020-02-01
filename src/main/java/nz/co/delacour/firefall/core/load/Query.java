@@ -24,13 +24,13 @@ import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 @Slf4j
 public class Query<T extends HasId<T>> {
 
-    public final Loader loader;
+     final Loader loader;
 
-    public final Class<T> entityClass;
+     final Class<T> entityClass;
 
-    public CollectionReference collection;
+     CollectionReference collection;
 
-    public com.google.cloud.firestore.Query query;
+     com.google.cloud.firestore.Query query;
 
     public Query(Loader loader, Class<T> entityClass, DocumentReference parent) {
         this.loader = loader;
@@ -58,6 +58,10 @@ public class Query<T extends HasId<T>> {
         }
 
         return onLoadMethods;
+    }
+
+    public CollectionReference getCollection() {
+        return collection;
     }
 
     public com.google.cloud.firestore.Query query() {
