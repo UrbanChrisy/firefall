@@ -34,4 +34,5 @@ public abstract class HasId<T extends HasId<T>> {
     public Ref<T> ref() {
         return new Ref<T>(entityClass, id);
     }
+
 }

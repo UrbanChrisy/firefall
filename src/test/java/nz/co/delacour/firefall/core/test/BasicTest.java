@@ -1,7 +1,9 @@
 package nz.co.delacour.firefall.core.test;
 
 import com.google.common.collect.Lists;
+import nz.co.delacour.firefall.core.SubCollection;
 import nz.co.delacour.firefall.core.entities.Basic;
+import nz.co.delacour.firefall.core.entities.BasicSubCollectionEntity;
 import nz.co.delacour.firefall.core.util.TestBase;
 import org.junit.jupiter.api.Test;
 
@@ -90,4 +92,54 @@ public class BasicTest extends TestBase {
         assertEquals(entity2.getId(), savedEntity.getId());
         assertEquals(entity2.getTestString(), saved2xEntity.getTestString());
     }
+
+    @Test
+    public void saveSubCollectionEntity() {
+        factory().register(Basic.class);
+        factory().register(BasicSubCollectionEntity.class);
+
+        Basic basic = new Basic();
+        basic.setTestString("testString");
+
+        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+        assertNotNull(savedEntity);
+        assertNotNull(savedEntity.getId());
+
+        BasicSubCollectionEntity basicSubCollectionEntity = new BasicSubCollectionEntity();
+        basicSubCollectionEntity.setTestString("testString");
+
+
+        var savedSubCollectionEntity1 = fir().parent(savedEntity.ref()).save().type(BasicSubCollectionEntity.class).entity(basicSubCollectionEntity).now();
+        assertNotNull(savedSubCollectionEntity1);
+        assertNotNull(savedSubCollectionEntity1.getId());
+
+    }
+
+    @Test
+    public void loadSubCollectionEntity() {
+        factory().register(Basic.class);
+        factory().register(BasicSubCollectionEntity.class);
+
+        Basic basic = new Basic();
+        basic.setTestString("testString");
+
+        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+        assertNotNull(savedEntity);
+        assertNotNull(savedEntity.getId());
+
+        BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
+        basicSubCollectionEntity1.setTestString("testString");
+
+        var savedSubCollectionEntity = fir().parent(savedEntity.ref()).save().type(BasicSubCollectionEntity.class).entity(basicSubCollectionEntity1).now();
+        assertNotNull(savedSubCollectionEntity);
+        assertNotNull(savedSubCollectionEntity.getId());
+
+
+        var loadSubEntity = fir().parent(savedEntity.ref()).load().type(BasicSubCollectionEntity.class).id(savedSubCollectionEntity.getId()).now();
+        assertNotNull(loadSubEntity);
+        assertNotNull(loadSubEntity.getId());
+        assertEquals(savedSubCollectionEntity.getId(), loadSubEntity.getId());
+
+    }
+
 }

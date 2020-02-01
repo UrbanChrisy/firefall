@@ -1,8 +1,8 @@
 package nz.co.delacour.firefall.core.delete;
 
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Precondition;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
+import com.google.common.collect.Lists;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 import nz.co.delacour.firefall.core.HasId;
 
@@ -18,19 +18,10 @@ import java.util.stream.Collectors;
 
 public class TypeDeleter<T extends HasId<T>> {
 
-    private final Deleter deleter;
-
-    private final Class<T> entityClass;
-
-    private final String kind;
-
     private CollectionReference collection;
 
-    public TypeDeleter(Deleter deleter, Class<T> entityClass) {
-        this.deleter = deleter;
-        this.entityClass = entityClass;
-        this.kind = TypeUtils.getKind(entityClass);
-        this.collection = deleter.getFirefall().factory().getFirestore().collection(this.kind);
+    public TypeDeleter(Deleter deleter, Class<T> entityClass, DocumentReference parent) {
+        this.collection = TypeUtils.getCollection(deleter.getFirefall().factory().getFirestore(), entityClass, parent);
     }
 
     public DeleteResult<T> id(String id) {
@@ -44,7 +35,7 @@ public class TypeDeleter<T extends HasId<T>> {
     }
 
     public DeleteResult<T> document(DocumentReference reference) {
-        return new DeleteResult(reference, null);
+        return new DeleteResult<>(this, reference, Precondition.NONE);
     }
 
     public DeleteResult<T> id(String id, Precondition options) {
@@ -58,34 +49,36 @@ public class TypeDeleter<T extends HasId<T>> {
     }
 
     public DeleteResult<T> document(DocumentReference reference, Precondition options) {
-        return new DeleteResult<>(reference, options);
-    }
-
-    public DeleteResults<T> ids(List<String> entities) {
-        var references = entities.stream().map((id) -> this.collection.document(id)).collect(Collectors.toList());
-        return this.documents(references);
+        return new DeleteResult<>(this,reference, options);
     }
 
     public DeleteResults<T> entities(List<T> entities) {
-        var references = entities.stream().map(HasId::getId).filter(Objects::nonNull).map(this.collection::document).collect(Collectors.toList());
-        return this.documents(references);
-    }
-
-    public DeleteResults<T> documents(List<DocumentReference> references) {
-        return new DeleteResults<>(references, this.collection, null);
-    }
-
-    public DeleteResults<T> ids(List<String> entities, Precondition options) {
-        var references = entities.stream().map((id) -> this.collection.document(id)).collect(Collectors.toList());
-        return this.documents(references, options);
+        return this.entities(entities, Precondition.NONE);
     }
 
     public DeleteResults<T> entities(List<T> entities, Precondition options) {
-        var references = entities.stream().map(HasId::getId).filter(Objects::nonNull).map(this.collection::document).collect(Collectors.toList());
+        var ids = entities.stream().map(HasId::getId).filter(Objects::nonNull).collect(Collectors.toList());
+        return this.ids(ids, options);
+    }
+
+    public DeleteResults<T> ids(List<String> ids) {
+        return this.ids(ids, Precondition.NONE);
+    }
+
+    public DeleteResults<T> ids(List<String> ids, Precondition options) {
+        var references = ids.stream().map(this.collection::document).collect(Collectors.toList());
         return this.documents(references, options);
+    }
+
+    public DeleteResults<T> documents(List<DocumentReference> references) {
+        return this.documents(references, Precondition.NONE);
     }
 
     public DeleteResults<T> documents(List<DocumentReference> references, Precondition options) {
         return new DeleteResults<>(references, this.collection, options);
+    }
+
+    public CollectionReference getCollection() {
+        return collection;
     }
 }

@@ -1,11 +1,9 @@
 package nz.co.delacour.firefall.core.load;
 
-import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.common.base.Strings;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.Ref;
-import nz.co.delacour.firefall.core.util.TypeUtils;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -15,20 +13,8 @@ import nz.co.delacour.firefall.core.util.TypeUtils;
 
 public class LoadType<T extends HasId<T>> extends Query<T> {
 
-    private final Loader loader;
-
-    private final Class<T> entityClass;
-
-    private final String kind;
-
-    private final CollectionReference collection;
-
-    public LoadType(Loader loader, Class<T> entityClass) {
-        super(loader, entityClass);
-        this.loader = loader;
-        this.entityClass = entityClass;
-        this.kind = TypeUtils.getKind(entityClass);
-        this.collection = this.loader.getFirefall().factory().getFirestore().collection(this.kind);
+    public LoadType(Loader loader, Class<T> entityClass, DocumentReference parent) {
+        super(loader, entityClass, parent);
     }
 
     public Loader getLoader() {
@@ -53,4 +39,5 @@ public class LoadType<T extends HasId<T>> extends Query<T> {
     public LoadResult<T> ref(Ref<T> ref) {
         return new LoadResult<>(ref.getReference(), entityClass);
     }
+
 }

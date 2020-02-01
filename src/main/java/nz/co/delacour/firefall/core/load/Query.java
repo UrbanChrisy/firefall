@@ -1,17 +1,19 @@
 package nz.co.delacour.firefall.core.load;
 
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldPath;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.*;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
+import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -22,32 +24,44 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 public class Query<T extends HasId<T>> {
 
-    private final Loader loader;
+     final Loader loader;
 
-    private final Class<T> entityClass;
+     final Class<T> entityClass;
 
-    private final String kind;
+     CollectionReference collection;
 
-    private CollectionReference collection;
+     com.google.cloud.firestore.Query query;
 
-    private com.google.cloud.firestore.Query query;
-
-    public Query(Loader loader, Class<T> entityClass) {
+    public Query(Loader loader, Class<T> entityClass, DocumentReference parent) {
         this.loader = loader;
         this.entityClass = entityClass;
-        this.kind = TypeUtils.getKind(entityClass);
-
-        var collectionQuery = this.loader.getFirefall().factory().getFirestore().collection(this.kind);
-        this.collection = collectionQuery;
-        this.query = collectionQuery;
+        this.collection = TypeUtils.getCollection(loader.getFirefall().factory().getFirestore(), entityClass, parent);
+        this.query = this.collection;
     }
 
     public Query(Loader loader, Class<T> entityClass, CollectionReference collectionQuery) {
         this.loader = loader;
         this.entityClass = entityClass;
-        this.kind = collectionQuery.getPath();
         this.collection = collectionQuery;
         this.query = collectionQuery;
+    }
+
+    public List<LifecycleMethod> getOnLoadMethods() {
+        var metadata = getMetadata(entityClass);
+        if (metadata == null) {
+            return Lists.newArrayList();
+        }
+
+        var onLoadMethods = metadata.getOnLoadMethods();
+        if (onLoadMethods == null) {
+            return Lists.newArrayList();
+        }
+
+        return onLoadMethods;
+    }
+
+    public CollectionReference getCollection() {
+        return collection;
     }
 
     public com.google.cloud.firestore.Query query() {

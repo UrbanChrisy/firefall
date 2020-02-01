@@ -20,7 +20,6 @@ import static nz.co.delacour.firefall.core.FirefallService.fir;
  */
 
 @Data
-@Slf4j
 public class Ref<T extends HasId<T>> {
 
     private DocumentReference reference;

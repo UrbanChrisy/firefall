@@ -45,15 +45,16 @@ public class FirefallFactory {
     }
 
     public Firefall open() {
-        final Firefall objectify = new Firefall(this);
+        final Firefall objectify = new Firefall(this, null);
         stacks.get().add(objectify);
         return objectify;
     }
 
     public void close(final Firefall ofy) {
         final Deque<Firefall> stack = stacks.get();
-        if (stack.isEmpty())
+        if (stack.isEmpty()) {
             throw new IllegalStateException("You have already destroyed the Firefall context.");
+        }
 
         final Firefall popped = stack.removeLast();
         assert popped == ofy : "Mismatched Firefall instances; somehow the stack was corrupted";

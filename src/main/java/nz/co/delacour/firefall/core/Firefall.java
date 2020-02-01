@@ -1,5 +1,6 @@
 package nz.co.delacour.firefall.core;
 
+import com.google.cloud.firestore.DocumentReference;
 import nz.co.delacour.firefall.core.delete.Deleter;
 import nz.co.delacour.firefall.core.load.Loader;
 import nz.co.delacour.firefall.core.save.Saver;
@@ -16,8 +17,15 @@ public class Firefall implements Closeable {
 
     private final FirefallFactory firefallFactory;
 
-    public Firefall(FirefallFactory firefallFactory) {
+    private final DocumentReference parent;
+
+    public Firefall(FirefallFactory firefallFactory, DocumentReference parent) {
         this.firefallFactory = firefallFactory;
+        this.parent = parent;
+    }
+
+    public <T extends HasId<T>> Firefall parent(Ref<T> ref) {
+        return new Firefall(this.firefallFactory, ref.getReference());
     }
 
     public FirefallFactory factory() {
@@ -25,15 +33,15 @@ public class Firefall implements Closeable {
     }
 
     public Loader load() {
-        return new Loader(this);
+        return new Loader(this, parent);
     }
 
     public Saver save() {
-        return new Saver(this);
+        return new Saver(this, parent);
     }
 
     public Deleter delete() {
-        return new Deleter(this);
+        return new Deleter(this, parent);
     }
 
     @Override
