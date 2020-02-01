@@ -4,7 +4,6 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.Ref;
-import nz.co.delacour.firefall.core.delete.Deleter;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.List;

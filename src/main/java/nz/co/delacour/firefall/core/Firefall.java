@@ -1,6 +1,5 @@
 package nz.co.delacour.firefall.core;
 
-import com.google.cloud.firestore.DocumentReference;
 import nz.co.delacour.firefall.core.delete.Deleter;
 import nz.co.delacour.firefall.core.load.Loader;
 import nz.co.delacour.firefall.core.save.Saver;

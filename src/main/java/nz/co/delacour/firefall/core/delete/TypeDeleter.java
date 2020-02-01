@@ -1,12 +1,11 @@
 package nz.co.delacour.firefall.core.delete;
 
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
-import com.google.common.collect.Lists;
-import nz.co.delacour.firefall.core.Ref;
-import nz.co.delacour.firefall.core.load.LoadType;
-import nz.co.delacour.firefall.core.util.TypeUtils;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Precondition;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.Ref;
+import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.List;
 import java.util.Objects;

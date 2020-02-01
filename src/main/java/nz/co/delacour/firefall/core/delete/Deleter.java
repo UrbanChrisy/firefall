@@ -1,6 +1,5 @@
 package nz.co.delacour.firefall.core.delete;
 
-import com.google.cloud.firestore.DocumentReference;
 import lombok.Data;
 import nz.co.delacour.firefall.core.Firefall;
 import nz.co.delacour.firefall.core.HasId;

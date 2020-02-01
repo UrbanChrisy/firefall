@@ -1,12 +1,8 @@
 package nz.co.delacour.firefall.core.save;
 
 
-import com.google.cloud.firestore.DocumentReference;
 import nz.co.delacour.firefall.core.Firefall;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
-
-import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
