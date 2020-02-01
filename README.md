@@ -29,7 +29,7 @@ fir().delete().type(Basic.class).entity(c).now();
 ```
 
 # Documentation
-Full documentation is available in the Wiki, which can be found here.
+Full documentation is available in the Wiki, which can be found [here](https://github.com/UrbanChrisy/firefall/wiki).
 
 # Downloads
 Firefall is released to Maven. To get the latest version, click [here](https://search.maven.org/artifact/nz.co.delacour/firefall-core).
