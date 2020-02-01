@@ -37,7 +37,7 @@
 
     <groupId>nz.co.delacour</groupId>
     <artifactId>firefall-core</artifactId>
-    <version>0.0.16</version>
+    <version>0.0.17</version>
     <packaging>jar</packaging>
 
     <name>Firefall</name>
