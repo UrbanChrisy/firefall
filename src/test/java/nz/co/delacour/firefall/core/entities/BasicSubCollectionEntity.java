@@ -15,7 +15,7 @@ import nz.co.delacour.firefall.core.annotations.SubCollectionEntity;
 @Entity
 public class BasicSubCollectionEntity extends HasId<BasicSubCollectionEntity> {
 
-    private String testString;
+    private String someString;
 
     public BasicSubCollectionEntity() {
         super(BasicSubCollectionEntity.class);

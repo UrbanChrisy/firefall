@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
+import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.util.TestBase;
 import org.junit.jupiter.api.Test;
 
@@ -224,5 +225,30 @@ public class QueryTest extends TestBase {
         assertEquals(queryEntity3.getSomeInt(), item3.getSomeInt());
     }
 
+
+    @Test
+    public void basicSubCollectionQuery() {
+        factory().register(QueryEntity.class);
+
+        QueryEntity queryEntity1 = new QueryEntity();
+        queryEntity1.setSomeString("someString1");
+
+        var entity = fir().save().type(QueryEntity.class).entity(queryEntity1).now();
+        assertNotNull(entity);
+        assertNotNull(entity.getId());
+
+        Basic basic = new Basic();
+        basic.setSomeString("someString2");
+
+        var entity2 = fir().save().type(Basic.class).parent(entity.ref()).entity(basic).now();
+        assertNotNull(entity2);
+        assertNotNull(entity2.getId());
+
+
+        var search = fir().load().type(Basic.class).filter("someString", "someString2").list().now();
+        assertNotNull(search);
+        assertFalse(search.isEmpty());
+
+    }
 
 }

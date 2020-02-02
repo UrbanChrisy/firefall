@@ -22,13 +22,13 @@ public class DeleteTest extends TestBase {
         factory().register(Basic.class);
 
         Basic basic = new Basic();
-        basic.setTestString("testString");
+        basic.setSomeString("someString");
 
         var entity = fir().save().type(Basic.class).entity(basic).now();
 
         assertNotNull(entity);
         assertNotNull(entity.getId());
-        assertEquals(entity.getTestString(), basic.getTestString());
+        assertEquals(entity.getSomeString(), basic.getSomeString());
 
         fir().delete().type(Basic.class).id(entity.getId()).now();
         var loadEntity = fir().load().type(Basic.class).id(entity.getId()).now();
@@ -41,14 +41,14 @@ public class DeleteTest extends TestBase {
         factory().register(BasicSubCollectionEntity.class);
 
         Basic basic = new Basic();
-        basic.setTestString("testString");
+        basic.setSomeString("someString");
 
         var savedEntity = fir().save().type(Basic.class).entity(basic).now();
         assertNotNull(savedEntity);
         assertNotNull(savedEntity.getId());
 
         BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
-        basicSubCollectionEntity1.setTestString("testString");
+        basicSubCollectionEntity1.setSomeString("someString");
 
         var savedSubCollectionEntity = fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity1).now();
         assertNotNull(savedSubCollectionEntity);

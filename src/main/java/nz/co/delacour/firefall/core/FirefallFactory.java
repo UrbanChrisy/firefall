@@ -50,14 +50,14 @@ public class FirefallFactory {
         return firefall;
     }
 
-    public void close(final Firefall ofy) {
+    public void close(final Firefall firefall) {
         final Deque<Firefall> stack = stacks.get();
         if (stack.isEmpty()) {
             throw new IllegalStateException("You have already destroyed the Firefall context.");
         }
 
         final Firefall popped = stack.removeLast();
-        assert popped == ofy : "Mismatched Firefall instances; somehow the stack was corrupted";
+        assert popped == firefall : "Mismatched Firefall instances; somehow the stack was corrupted";
     }
 
     public <T extends HasId<T>> void register(final Class<T> clazz) {
