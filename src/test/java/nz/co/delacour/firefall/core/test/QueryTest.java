@@ -254,7 +254,7 @@ public class QueryTest extends TestBase {
         var search = fir().load().type(Basic.class).filter("someString", "someString2").list().now();
         assertNotNull(search);
         assertFalse(search.isEmpty());
-        assertEquals(search.size(), 1);
+        assertEquals( 1, search.size());
 
 
         assertNotNull(search.get(0).ref());
