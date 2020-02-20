@@ -29,14 +29,14 @@ public class TypeDeleter<T extends HasId<T>> {
        this(deleter, entityClass, null);
     }
 
-    public TypeDeleter(Deleter deleter, Class<T> entityClass, DocumentReference parent) {
+    public TypeDeleter(Deleter deleter, Class<T> entityClass, Ref<?> parent) {
         this.deleter = deleter;
         this.entityClass = entityClass;
-        this.collection = TypeUtils.getCollection(deleter.getFirefall().factory().getFirestore(), entityClass, parent);
+        this.collection = TypeUtils.getCollection(deleter.getFirefall().factory().getFirestore(), entityClass);
     }
 
     public TypeDeleter<T> parent(Ref<?> ref) {
-        return new TypeDeleter<>(this.deleter, this.entityClass, ref.getReference());
+        return new TypeDeleter<>(this.deleter, this.entityClass, ref);
     }
 
     public DeleteResult<T> id(String id) {
@@ -93,7 +93,4 @@ public class TypeDeleter<T extends HasId<T>> {
         return new DeleteResults<>(references, this.collection, options);
     }
 
-    public CollectionReference getCollection() {
-        return collection;
-    }
 }

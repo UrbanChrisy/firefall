@@ -19,7 +19,10 @@ import static nz.co.delacour.firefall.core.FirefallService.fir;
  */
 
 @Data
-public class Ref<T extends HasId<T>> {
+public class  Ref<T extends HasId<T>> {
+
+    @Exclude
+    private Class<T> entityClass;
 
     private DocumentReference reference;
 
@@ -31,6 +34,7 @@ public class Ref<T extends HasId<T>> {
             return;
         }
 
+        this.entityClass = entityClass;
         this.reference = fir().load().type(entityClass).ref(id);
     }
 
@@ -45,13 +49,13 @@ public class Ref<T extends HasId<T>> {
     }
 
     @Exclude
-    public T get(Class<T> entityClass) {
-        return load(entityClass).now();
+    public T get() {
+        return load().now();
     }
 
     @Exclude
-    public LoadResult<T> load(Class<T> entityClass) {
-        return new LoadResult<T>(this.reference, entityClass);
+    public LoadResult<T> load() {
+        return new LoadResult<T>(this.reference, this.entityClass);
     }
 
     public static <T extends HasId<T>> Ref<T> create(Class<T> entityClass, String id) {

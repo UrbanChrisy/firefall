@@ -2,6 +2,7 @@ package nz.co.delacour.firefall.core.load;
 
 import nz.co.delacour.firefall.core.Firefall;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.util.TypeUtils;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -22,7 +23,8 @@ public class Loader {
     }
 
     public <T extends HasId<T>> LoadType<T> type(Class<T> entityClass) {
-        return new LoadType<>(this, entityClass);
+        var collection = TypeUtils.getCollection(getFirefall().factory().getFirestore(), entityClass);
+        return new LoadType<>(this, entityClass, collection);
     }
 
 }

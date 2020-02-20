@@ -35,33 +35,33 @@ public class DeleteTest extends TestBase {
         assertNull(loadEntity);
     }
 
-    @Test
-    public void deleteEntityWithSubCollections() {
-        factory().register(Basic.class);
-        factory().register(BasicSubCollectionEntity.class);
-
-        Basic basic = new Basic();
-        basic.setSomeString("someString");
-
-        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
-        assertNotNull(savedEntity);
-        assertNotNull(savedEntity.getId());
-
-        BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
-        basicSubCollectionEntity1.setSomeString("someString");
-
-        var savedSubCollectionEntity = fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity1).now();
-        assertNotNull(savedSubCollectionEntity);
-        assertNotNull(savedSubCollectionEntity.getId());
-
-        fir().delete().type(Basic.class).entity(basic).now();
-
-        var loadEntity = fir().load().type(Basic.class).id(basic.getId()).now();
-        assertNull(loadEntity);
-
-        var loadSubEntity = fir().load().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).id(savedSubCollectionEntity.getId()).now();
-        assertNotNull(loadSubEntity);
-        assertNotNull(loadSubEntity.getId());
-
-    }
+//    @Test
+//    public void deleteEntityWithSubCollections() {
+//        factory().register(Basic.class);
+//        factory().register(BasicSubCollectionEntity.class);
+//
+//        Basic basic = new Basic();
+//        basic.setSomeString("someString");
+//
+//        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+//        assertNotNull(savedEntity);
+//        assertNotNull(savedEntity.getId());
+//
+//        BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
+//        basicSubCollectionEntity1.setSomeString("someString");
+//
+//        var savedSubCollectionEntity = fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity1).now();
+//        assertNotNull(savedSubCollectionEntity);
+//        assertNotNull(savedSubCollectionEntity.getId());
+//
+//        fir().delete().type(Basic.class).entity(basic).now();
+//
+//        var loadEntity = fir().load().type(Basic.class).id(basic.getId()).now();
+//        assertNull(loadEntity);
+//
+//        var loadSubEntity = fir().load().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).id(savedSubCollectionEntity.getId()).now();
+//        assertNotNull(loadSubEntity);
+//        assertNotNull(loadSubEntity.getId());
+//
+//    }
 }

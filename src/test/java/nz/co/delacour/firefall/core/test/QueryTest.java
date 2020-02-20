@@ -2,12 +2,19 @@ package nz.co.delacour.firefall.core.test;
 
 import com.google.common.collect.Lists;
 import lombok.Data;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.util.TestBase;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static nz.co.delacour.firefall.core.FirefallService.factory;
 import static nz.co.delacour.firefall.core.FirefallService.fir;
@@ -225,10 +232,10 @@ public class QueryTest extends TestBase {
         assertEquals(queryEntity3.getSomeInt(), item3.getSomeInt());
     }
 
-
     @Test
     public void basicSubCollectionQuery() {
         factory().register(QueryEntity.class);
+        factory().register(Basic.class);
 
         QueryEntity queryEntity1 = new QueryEntity();
         queryEntity1.setSomeString("someString1");
@@ -244,10 +251,15 @@ public class QueryTest extends TestBase {
         assertNotNull(entity2);
         assertNotNull(entity2.getId());
 
-
         var search = fir().load().type(Basic.class).filter("someString", "someString2").list().now();
         assertNotNull(search);
         assertFalse(search.isEmpty());
+        assertEquals(search.size(), 1);
+
+
+        assertNotNull(search.get(0).ref());
+        assertNotNull(search.get(0).ref().getEntityClass());
+        assertNotNull(search.get(0).ref().getReference());
 
     }
 

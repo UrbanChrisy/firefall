@@ -26,14 +26,14 @@ public class TypeSaver<T extends HasId<T>> {
         this(saver, entityClass, null);
     }
 
-    public TypeSaver(Saver saver, Class<T> entityClass, DocumentReference parent) {
+    public TypeSaver(Saver saver, Class<T> entityClass, Ref<?> parent) {
         this.saver = saver;
         this.entityClass = entityClass;
-        this.collection = TypeUtils.getCollection(saver.getFirefall().factory().getFirestore(), entityClass, parent);
+        this.collection = TypeUtils.getCollection(saver.getFirefall().factory().getFirestore(), entityClass);
     }
 
     public TypeSaver<T> parent(Ref<?> ref) {
-        return new TypeSaver<>(this.saver, this.entityClass, ref.getReference());
+        return new TypeSaver<>(this.saver, this.entityClass, ref);
     }
 
     public SaveResult<T> entity(T t) {
@@ -44,7 +44,4 @@ public class TypeSaver<T extends HasId<T>> {
         return new SaveResults<>(items, entityClass, this.collection);
     }
 
-    public CollectionReference getCollection() {
-        return collection;
-    }
 }

@@ -4,10 +4,12 @@ import com.google.cloud.firestore.*;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.Ref;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,26 +25,12 @@ public class Query<T extends HasId<T>> {
 
      final Class<T> entityClass;
 
-     CollectionReference collection;
-
      com.google.cloud.firestore.Query query;
 
-    public Query(Loader loader, Class<T> entityClass, DocumentReference parent) {
+    public Query(Loader loader, Class<T> entityClass, com.google.cloud.firestore.Query query) {
         this.loader = loader;
         this.entityClass = entityClass;
-        this.collection = TypeUtils.getCollection(loader.getFirefall().factory().getFirestore(), entityClass, parent);
-        this.query = this.collection;
-    }
-
-    public Query(Loader loader, Class<T> entityClass, CollectionReference collectionQuery) {
-        this.loader = loader;
-        this.entityClass = entityClass;
-        this.collection = collectionQuery;
-        this.query = collectionQuery;
-    }
-
-    public CollectionReference getCollection() {
-        return collection;
+        this.query = query;
     }
 
     public com.google.cloud.firestore.Query query() {
@@ -113,11 +101,11 @@ public class Query<T extends HasId<T>> {
         }
     }
 
-    public Query filter(FieldPath field, Object value) {
+    public Query<T> filter(FieldPath field, Object value) {
         return filter(field, "=", value);
     }
 
-    public Query filter(FieldPath field, String operatorStr, Object value) {
+    public Query<T> filter(FieldPath field, String operatorStr, Object value) {
         FilterOperator operator = this.translateFilterOperator(operatorStr);
 
         switch (operator) {
@@ -135,6 +123,10 @@ public class Query<T extends HasId<T>> {
                 break;
             case EQUAL:
                 this.query = this.query.whereEqualTo(field, value);
+                break;
+            case ARRAY_CONTAINS_ANY:
+                List<Object> list = (List<Object>) value;
+                this.query = this.query.whereArrayContainsAny(field, list);
                 break;
             case ARRAY_CONTAINS:
                 this.query = this.query.whereArrayContains(field, value);
@@ -171,6 +163,10 @@ public class Query<T extends HasId<T>> {
                 case EQUAL:
                     this.query = this.query.whereEqualTo(field, value);
                     break;
+                case ARRAY_CONTAINS_ANY:
+                    List<Object> list = (List<Object>) value;
+                    this.query = this.query.whereArrayContainsAny(field, list);
+                    break;
                 case ARRAY_CONTAINS:
                     this.query = this.query.whereArrayContains(field, value);
                     break;
@@ -197,6 +193,8 @@ public class Query<T extends HasId<T>> {
             case "<=":
                 return FilterOperator.LESS_THAN_OR_EQUAL;
             case "in":
+                return FilterOperator.ARRAY_CONTAINS_ANY;
+            case "in all":
                 return FilterOperator.ARRAY_CONTAINS;
             default:
                 throw new IllegalArgumentException("'" + operator + "' is not a legal filter operator");

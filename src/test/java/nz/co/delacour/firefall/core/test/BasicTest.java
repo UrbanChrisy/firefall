@@ -93,52 +93,52 @@ public class BasicTest extends TestBase {
 
     }
 
-    @Test
-    public void saveSubCollectionEntity() {
-        factory().register(Basic.class);
-        factory().register(BasicSubCollectionEntity.class);
-
-        Basic basic = new Basic();
-        basic.setSomeString("someString");
-
-        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
-        assertNotNull(savedEntity);
-        assertNotNull(savedEntity.getId());
-
-        BasicSubCollectionEntity basicSubCollectionEntity = new BasicSubCollectionEntity();
-        basicSubCollectionEntity.setSomeString("someString");
-
-
-        var savedSubCollectionEntity1 = fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity).now();
-        assertNotNull(savedSubCollectionEntity1);
-        assertNotNull(savedSubCollectionEntity1.getId());
-
-    }
-
-    @Test
-    public void loadSubCollectionEntity() {
-        factory().register(Basic.class);
-        factory().register(BasicSubCollectionEntity.class);
-
-        Basic basic = new Basic();
-        basic.setSomeString("someString");
-
-        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
-        assertNotNull(savedEntity);
-        assertNotNull(savedEntity.getId());
-
-        BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
-        basicSubCollectionEntity1.setSomeString("someString");
-
-        var savedSubCollectionEntity =  fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity1).now();
-        assertNotNull(savedSubCollectionEntity);
-        assertNotNull(savedSubCollectionEntity.getId());
-
-        var loadSubEntity = fir().load().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).id(savedSubCollectionEntity.getId()).now();
-        assertNotNull(loadSubEntity);
-        assertNotNull(loadSubEntity.getId());
-        assertEquals(savedSubCollectionEntity.getId(), loadSubEntity.getId());
-
-    }
+//    @Test
+//    public void saveSubCollectionEntity() {
+//        factory().register(Basic.class);
+//        factory().register(BasicSubCollectionEntity.class);
+//
+//        Basic basic = new Basic();
+//        basic.setSomeString("someString");
+//
+//        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+//        assertNotNull(savedEntity);
+//        assertNotNull(savedEntity.getId());
+//
+//        BasicSubCollectionEntity basicSubCollectionEntity = new BasicSubCollectionEntity();
+//        basicSubCollectionEntity.setSomeString("someString");
+//
+//
+//        var savedSubCollectionEntity1 = fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity).now();
+//        assertNotNull(savedSubCollectionEntity1);
+//        assertNotNull(savedSubCollectionEntity1.getId());
+//
+//    }
+//
+//    @Test
+//    public void loadSubCollectionEntity() {
+//        factory().register(Basic.class);
+//        factory().register(BasicSubCollectionEntity.class);
+//
+//        Basic basic = new Basic();
+//        basic.setSomeString("someString");
+//
+//        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+//        assertNotNull(savedEntity);
+//        assertNotNull(savedEntity.getId());
+//
+//        BasicSubCollectionEntity basicSubCollectionEntity1 = new BasicSubCollectionEntity();
+//        basicSubCollectionEntity1.setSomeString("someString");
+//
+//        var savedSubCollectionEntity =  fir().save().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).entity(basicSubCollectionEntity1).now();
+//        assertNotNull(savedSubCollectionEntity);
+//        assertNotNull(savedSubCollectionEntity.getId());
+//
+//        var loadSubEntity = fir().load().type(BasicSubCollectionEntity.class).parent(savedEntity.ref()).id(savedSubCollectionEntity.getId()).now();
+//        assertNotNull(loadSubEntity);
+//        assertNotNull(loadSubEntity.getId());
+//        assertEquals(savedSubCollectionEntity.getId(), loadSubEntity.getId());
+//
+//    }
 
 }
