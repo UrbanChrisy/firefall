@@ -1,5 +1,6 @@
 package nz.co.delacour.firefall.core.load;
 
+import com.google.api.client.util.Lists;
 import com.google.cloud.firestore.*;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
@@ -124,9 +125,13 @@ public class Query<T extends HasId<T>> {
             case EQUAL:
                 this.query = this.query.whereEqualTo(field, value);
                 break;
+            case IN:
+                List<?> inList = (List<?>) value;
+                this.query = this.query.whereIn(field, inList);
+                break;
             case ARRAY_CONTAINS_ANY:
-                List<Object> list = (List<Object>) value;
-                this.query = this.query.whereArrayContainsAny(field, list);
+                List<?> anyList = (List<?>) value;
+                this.query = this.query.whereArrayContainsAny(field, anyList);
                 break;
             case ARRAY_CONTAINS:
                 this.query = this.query.whereArrayContains(field, value);
@@ -163,9 +168,13 @@ public class Query<T extends HasId<T>> {
                 case EQUAL:
                     this.query = this.query.whereEqualTo(field, value);
                     break;
+                case IN:
+                    List<?> inList = (List<?>) value;
+                    this.query = this.query.whereIn(field, inList);
+                    break;
                 case ARRAY_CONTAINS_ANY:
-                    List<Object> list = (List<Object>) value;
-                    this.query = this.query.whereArrayContainsAny(field, list);
+                    List<?> anyList = (List<?>) value;
+                    this.query = this.query.whereArrayContainsAny(field, anyList);
                     break;
                 case ARRAY_CONTAINS:
                     this.query = this.query.whereArrayContains(field, value);
@@ -193,8 +202,10 @@ public class Query<T extends HasId<T>> {
             case "<=":
                 return FilterOperator.LESS_THAN_OR_EQUAL;
             case "in":
+                return FilterOperator.IN;
+            case "contains any":
                 return FilterOperator.ARRAY_CONTAINS_ANY;
-            case "in all":
+            case "contains":
                 return FilterOperator.ARRAY_CONTAINS;
             default:
                 throw new IllegalArgumentException("'" + operator + "' is not a legal filter operator");

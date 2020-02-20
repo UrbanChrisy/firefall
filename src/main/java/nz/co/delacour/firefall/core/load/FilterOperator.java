@@ -12,6 +12,7 @@ public enum FilterOperator {
     GREATER_THAN,
     GREATER_THAN_OR_EQUAL,
     EQUAL,
+    IN,
     ARRAY_CONTAINS,
     ARRAY_CONTAINS_ANY;
 }

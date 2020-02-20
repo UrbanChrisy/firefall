@@ -68,6 +68,48 @@ public class QueryTest extends TestBase {
     }
 
     @Test
+    public void inQuery1() {
+        factory().register(QueryEntity.class);
+
+        QueryEntity queryEntity1 = new QueryEntity();
+        queryEntity1.setSomeString("someString1");
+        QueryEntity queryEntity2 = new QueryEntity();
+        queryEntity2.setSomeString("someString2");
+
+        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
+        assertNotNull(entities);
+
+        var search = fir().load().type(QueryEntity.class).filter("someString in", Lists.newArrayList("someString1", "someString3")).list().now();
+
+        assertNotNull(search);
+        assertEquals(1, search.size());
+
+        var item = search.get(0);
+        assertNotNull(item);
+        assertEquals(queryEntity1.getSomeString(), item.getSomeString());
+    }
+
+    @Test
+    public void inQuery2() {
+        factory().register(QueryEntity.class);
+
+        QueryEntity queryEntity1 = new QueryEntity();
+        queryEntity1.setSomeString("someString1");
+        QueryEntity queryEntity2 = new QueryEntity();
+        queryEntity2.setSomeString("someString2");
+        QueryEntity queryEntity3 = new QueryEntity();
+        queryEntity3.setSomeString("someString3");
+
+        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
+        assertNotNull(entities);
+
+        var search = fir().load().type(QueryEntity.class).filter("someString in", Lists.newArrayList("someString1", "someString2")).list().now();
+
+        assertNotNull(search);
+        assertEquals(2, search.size());
+    }
+
+    @Test
     public void intQuery() {
         factory().register(QueryEntity.class);
 
