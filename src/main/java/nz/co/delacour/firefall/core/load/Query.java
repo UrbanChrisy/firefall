@@ -1,13 +1,13 @@
 package nz.co.delacour.firefall.core.load;
 
-import com.google.api.client.util.Lists;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldPath;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.Ref;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
-import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -100,45 +100,6 @@ public class Query<T extends HasId<T>> {
         } catch (InterruptedException | ExecutionException e) {
             throw new FirefallException(e);
         }
-    }
-
-    public Query<T> filter(FieldPath field, Object value) {
-        return filter(field, "=", value);
-    }
-
-    public Query<T> filter(FieldPath field, String operatorStr, Object value) {
-        FilterOperator operator = this.translateFilterOperator(operatorStr);
-
-        switch (operator) {
-            case LESS_THAN:
-                this.query = this.query.whereLessThan(field, value);
-                break;
-            case LESS_THAN_OR_EQUAL:
-                this.query = this.query.whereLessThanOrEqualTo(field, value);
-                break;
-            case GREATER_THAN:
-                this.query = this.query.whereGreaterThan(field, value);
-                break;
-            case GREATER_THAN_OR_EQUAL:
-                this.query = this.query.whereGreaterThanOrEqualTo(field, value);
-                break;
-            case EQUAL:
-                this.query = this.query.whereEqualTo(field, value);
-                break;
-            case IN:
-                List<?> inList = (List<?>) value;
-                this.query = this.query.whereIn(field, inList);
-                break;
-            case ARRAY_CONTAINS_ANY:
-                List<?> anyList = (List<?>) value;
-                this.query = this.query.whereArrayContainsAny(field, anyList);
-                break;
-            case ARRAY_CONTAINS:
-                this.query = this.query.whereArrayContains(field, value);
-                break;
-        }
-
-        return this;
     }
 
     public Query<T> filter(String condition, Object value) {

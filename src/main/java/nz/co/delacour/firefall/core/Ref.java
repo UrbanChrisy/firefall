@@ -19,10 +19,7 @@ import static nz.co.delacour.firefall.core.FirefallService.fir;
  */
 
 @Data
-public class  Ref<T extends HasId<T>> {
-
-    @Exclude
-    private Class<T> entityClass;
+public class Ref<T extends HasId<T>> {
 
     private DocumentReference reference;
 
@@ -34,7 +31,6 @@ public class  Ref<T extends HasId<T>> {
             return;
         }
 
-        this.entityClass = entityClass;
         this.reference = fir().load().type(entityClass).ref(id);
     }
 
@@ -49,13 +45,13 @@ public class  Ref<T extends HasId<T>> {
     }
 
     @Exclude
-    public T get() {
-        return load().now();
+    public T get(Class<T> entityClass) {
+        return load(entityClass).now();
     }
 
     @Exclude
-    public LoadResult<T> load() {
-        return new LoadResult<T>(this.reference, this.entityClass);
+    public LoadResult<T> load(Class<T> entityClass) {
+        return new LoadResult<T>(this.reference, entityClass);
     }
 
     public static <T extends HasId<T>> Ref<T> create(Class<T> entityClass, String id) {
@@ -67,6 +63,7 @@ public class  Ref<T extends HasId<T>> {
         return "Ref<?>(" + this.getId() + ")";
     }
 
+    @Exclude
     public String toUrlSafe() {
 
         var id = this.getId();
@@ -80,5 +77,4 @@ public class  Ref<T extends HasId<T>> {
             throw new IllegalStateException("Unexpected encoding exception", var2);
         }
     }
-
 }
