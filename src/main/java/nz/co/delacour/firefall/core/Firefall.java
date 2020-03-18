@@ -13,7 +13,7 @@ import java.io.Closeable;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class Firefall implements Closeable {
+public class Firefall {
 
     private final FirefallFactory firefallFactory;
 
@@ -39,11 +39,6 @@ public class Firefall implements Closeable {
 
     public Deleter delete() {
         return new Deleter(this);
-    }
-
-    @Override
-    public void close() {
-        factory().close(this);
     }
 
 }

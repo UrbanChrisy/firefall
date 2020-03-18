@@ -19,8 +19,6 @@ public class FirefallFactory {
 
     private final Registrar registrar;
 
-    private final ThreadLocal<Deque<Firefall>> stacks = ThreadLocal.withInitial(ArrayDeque::new);
-
     public FirefallFactory(Firestore firestore) {
         this.firestore = firestore;
         this.registrar = new Registrar(this);
@@ -35,29 +33,7 @@ public class FirefallFactory {
     }
 
     public Firefall fir() {
-        final Deque<Firefall> stack = stacks.get();
-        if (stack.isEmpty()) {
-            throw new IllegalStateException("You have not started a Firefall context. You are probably missing the " +
-                    "FirefallFilter. If you are not running in the context of an http request, see the " +
-                    "Firefall.run() method.");
-        }
-        return stack.getLast();
-    }
-
-    public Firefall open() {
-        final Firefall firefall = new Firefall(this);
-        stacks.get().add(firefall);
-        return firefall;
-    }
-
-    public void close(final Firefall firefall) {
-        final Deque<Firefall> stack = stacks.get();
-        if (stack.isEmpty()) {
-            throw new IllegalStateException("You have already destroyed the Firefall context.");
-        }
-
-        final Firefall popped = stack.removeLast();
-        assert popped == firefall : "Mismatched Firefall instances; somehow the stack was corrupted";
+        return new Firefall(this);
     }
 
     public <T extends HasId<T>> void register(final Class<T> clazz) {

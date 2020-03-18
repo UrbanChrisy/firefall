@@ -36,10 +36,6 @@ public class FirefallService {
         return factory().fir();
     }
 
-    public static Closeable begin() {
-        return factory().open();
-    }
-
     public static <T extends HasId<T>> void register(Class<T> clazz) {
         factory().register(clazz);
     }
