@@ -300,7 +300,6 @@ public class QueryTest extends TestBase {
 
 
         assertNotNull(search.get(0).ref());
-        assertNotNull(search.get(0).ref().getEntityClass());
         assertNotNull(search.get(0).ref().getReference());
 
     }
