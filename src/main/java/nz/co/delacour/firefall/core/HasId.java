@@ -12,10 +12,10 @@ import com.google.cloud.firestore.annotation.Exclude;
 public abstract class HasId<T extends HasId<T>> {
 
     @Exclude
-    public final Class<T> entityClass;
+    private final Class<T> entityClass;
 
     private String id;
-
+    
     public HasId(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
