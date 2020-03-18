@@ -28,8 +28,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestBase {
 
-    private Closeable session;
-
     @BeforeAll
     public void setup() {
         initMocks(this);
@@ -40,7 +38,6 @@ public class TestBase {
             }
             FirestoreOptions options = FirestoreOptions.newBuilder().setCredentials(GoogleCredentials.fromStream(stream)).build();
             FirefallService.init(options.getService());
-            this.session = FirefallService.begin();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,15 +58,6 @@ public class TestBase {
                 recursiveDelete(document.listCollections());
                 document.delete();
             }
-        }
-    }
-
-    @AfterAll
-    public void tearDown() {
-        try {
-            this.session.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
