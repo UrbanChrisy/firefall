@@ -4,6 +4,7 @@ import lombok.Data;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.annotations.Entity;
 import nz.co.delacour.firefall.core.annotations.OnLoad;
+import nz.co.delacour.firefall.core.entities.Basic;
 import nz.co.delacour.firefall.core.util.TestBase;
 import org.junit.jupiter.api.Test;
 
@@ -43,10 +44,10 @@ public class OnLoadTest extends TestBase {
         OnLoadEntity entity = new OnLoadEntity();
         entity.setIncrementOnLoad(1);
 
-        var savedEntity = fir().save().type(OnLoadEntity.class).entity(entity).now();
+        var savedEntity = fir().type(OnLoadEntity.class).save().entity(entity).now();
         assertNotNull(savedEntity);
 
-        var loadedEntity = fir().load().type(OnLoadEntity.class).id(savedEntity.getId()).now();
+        var loadedEntity = fir().type(OnLoadEntity.class).load().id(savedEntity.getId()).now();
         assertNotNull(loadedEntity);
         assertEquals(loadedEntity.getIncrementOnLoad(), 2);
     }

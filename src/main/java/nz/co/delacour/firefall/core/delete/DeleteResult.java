@@ -21,7 +21,7 @@ public class DeleteResult<T extends HasId<T>> {
 
     private final ApiFuture<WriteResult> future;
 
-    public DeleteResult(TypeDeleter<T> typeDeleter, DocumentReference reference, Precondition options) {
+    public DeleteResult(DocumentReference reference, Precondition options) {
         if (reference == null) {
             this.future = ApiFutures.immediateFuture(null);
         } else {

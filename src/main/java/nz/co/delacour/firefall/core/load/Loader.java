@@ -1,7 +1,12 @@
 package nz.co.delacour.firefall.core.load;
 
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.common.base.Strings;
+import nz.co.delacour.firefall.core.EntityType;
 import nz.co.delacour.firefall.core.Firefall;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.Ref;
 import nz.co.delacour.firefall.core.util.TypeUtils;
 
 /**
@@ -10,21 +15,29 @@ import nz.co.delacour.firefall.core.util.TypeUtils;
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  */
 
-public class Loader {
+public class Loader<T extends HasId<T>> extends Query<T> {
 
-    private final Firefall firefall;
-
-    public Loader(Firefall firefall) {
-        this.firefall = firefall;
+    public Loader(EntityType<T> entityType, Class<T> entityClass, CollectionReference collection) {
+        super(entityType, entityClass, collection, collection);
     }
 
-    public Firefall getFirefall() {
-        return firefall;
+    public LoadResult<T> id(String id) {
+        if (Strings.isNullOrEmpty(id)) {
+            return new LoadResult<>(entityClass);
+        }
+        return new LoadResult<>(collection.document(id), entityClass);
     }
 
-    public <T extends HasId<T>> LoadType<T> type(Class<T> entityClass) {
-        var collection = TypeUtils.getCollection(getFirefall().factory().getFirestore(), entityClass);
-        return new LoadType<>(this, entityClass, collection);
+    public DocumentReference ref(String id) {
+        return this.collection.document(id);
+    }
+
+    public LoadResult<T> ref(DocumentReference reference) {
+        return new LoadResult<>(reference, entityClass);
+    }
+
+    public LoadResult<T> ref(Ref<T> ref) {
+        return new LoadResult<>(ref.getReference(), entityClass);
     }
 
 }

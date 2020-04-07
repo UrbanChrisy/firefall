@@ -1,14 +1,16 @@
 package nz.co.delacour.firefall.core.load;
 
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldPath;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
+import nz.co.delacour.firefall.core.EntityType;
 import nz.co.delacour.firefall.core.HasId;
-import nz.co.delacour.firefall.core.Ref;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,16 +24,31 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 public class Query<T extends HasId<T>> {
 
-     final Loader loader;
+    final EntityType<T> entityType;
 
-     final Class<T> entityClass;
+    final Class<T> entityClass;
 
-     com.google.cloud.firestore.Query query;
+    com.google.cloud.firestore.Query query;
 
-    public Query(Loader loader, Class<T> entityClass, com.google.cloud.firestore.Query query) {
-        this.loader = loader;
+    @Nullable
+    final CollectionReference collection;
+
+    public Query(EntityType<T> entityType, Class<T> entityClass, com.google.cloud.firestore.Query query, CollectionReference collection) {
+        this.entityType = entityType;
         this.entityClass = entityClass;
         this.query = query;
+        this.collection = collection;
+    }
+
+    public Query(EntityType<T> entityType, Class<T> entityClass, com.google.cloud.firestore.Query query) {
+        this.entityType = entityType;
+        this.entityClass = entityClass;
+        this.query = query;
+        this.collection = null;
+    }
+
+    public EntityType<T> getEntityType() {
+        return entityType;
     }
 
     public com.google.cloud.firestore.Query query() {
@@ -73,7 +90,7 @@ public class Query<T extends HasId<T>> {
     }
 
     public LoadResults<T> list() {
-        return new LoadResults<>(this.query, entityClass);
+        return new LoadResults<>(this, entityClass);
     }
 
     public Query<T> startAt(DocumentSnapshot documentSnapshot) {
@@ -82,8 +99,74 @@ public class Query<T extends HasId<T>> {
     }
 
     public Query<T> startAt(String cursor) {
-        this.query = this.query.startAt(cursor);
+
+        if (this.collection == null) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return startAt(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
+    }
+
+    public Query<T> startAfter(DocumentSnapshot documentSnapshot) {
+        this.query = this.query.startAfter(documentSnapshot);
         return this;
+    }
+
+    public Query<T> startAfter(String cursor) {
+
+        if (this.collection == null) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return startAfter(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
+    }
+
+    public Query<T> endAt(DocumentSnapshot documentSnapshot) {
+        this.query = this.query.endAt(documentSnapshot);
+        return this;
+    }
+
+    public Query<T> endAt(String cursor) {
+
+        if (this.collection == null) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return endAt(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
+    }
+
+    public Query<T> endBefore(DocumentSnapshot documentSnapshot) {
+        this.query = this.query.endBefore(documentSnapshot);
+        return this;
+    }
+
+    public Query<T> endBefore(String cursor) {
+
+        if (this.collection == null) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return endBefore(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
     }
 
     public Iterator<QueryDocumentSnapshot> iterator() {

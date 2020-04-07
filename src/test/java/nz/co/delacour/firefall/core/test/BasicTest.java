@@ -22,7 +22,7 @@ public class BasicTest extends TestBase {
     public void loadNullId() {
         factory().register(Basic.class);
 
-        var savedEntity = fir().load().type(Basic.class).id(null).now();
+        var savedEntity = fir().type(Basic.class).load().id(null).now();
         assertNull(savedEntity);
     }
 
@@ -33,11 +33,11 @@ public class BasicTest extends TestBase {
         Basic basic = new Basic();
         basic.setSomeString("someString");
 
-        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+        var savedEntity = fir().type(Basic.class).save().entity(basic).now();
         assertNotNull(savedEntity);
         assertNotNull(savedEntity.getId());
 
-        var entity = fir().load().type(Basic.class).id(savedEntity.getId()).now();
+        var entity = fir().type(Basic.class).load().id(savedEntity.getId()).now();
         assertNotNull(entity);
         assertNotNull(entity.getId());
         assertEquals(entity.getId(), savedEntity.getId());
@@ -53,7 +53,7 @@ public class BasicTest extends TestBase {
         Basic basic2 = new Basic();
         basic2.setSomeString("someString2");
 
-        var entities = fir().save().type(Basic.class).entities(Lists.newArrayList(basic1, basic2)).now();
+        var entities = fir().type(Basic.class).save().entities(Lists.newArrayList(basic1, basic2)).now();
 
         assertNotNull(entities);
         assertFalse(entities.isEmpty());
@@ -69,11 +69,11 @@ public class BasicTest extends TestBase {
         Basic basic = new Basic();
         basic.setSomeString("someString");
 
-        var savedEntity = fir().save().type(Basic.class).entity(basic).now();
+        var savedEntity = fir().type(Basic.class).save().entity(basic).now();
         assertNotNull(savedEntity);
         assertNotNull(savedEntity.getId());
 
-        var entity = fir().load().type(Basic.class).id(savedEntity.getId()).now();
+        var entity = fir().type(Basic.class).load().id(savedEntity.getId()).now();
         assertNotNull(entity);
         assertNotNull(entity.getId());
         assertEquals(entity.getId(), savedEntity.getId());
@@ -81,11 +81,11 @@ public class BasicTest extends TestBase {
 
         entity.setSomeString("someString2");
 
-        var saved2xEntity = fir().save().type(Basic.class).entity(entity).now();
+        var saved2xEntity = fir().type(Basic.class).save().entity(entity).now();
         assertNotNull(savedEntity);
         assertNotNull(savedEntity.getId());
 
-        var entity2 = fir().load().type(Basic.class).id(savedEntity.getId()).now();
+        var entity2 = fir().type(Basic.class).load().id(savedEntity.getId()).now();
         assertNotNull(entity2);
         assertNotNull(entity2.getId());
         assertEquals(entity2.getId(), savedEntity.getId());

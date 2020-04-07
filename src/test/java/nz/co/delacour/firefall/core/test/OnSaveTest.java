@@ -44,7 +44,7 @@ public class OnSaveTest extends TestBase {
         OnSaveEntity entity = new OnSaveEntity();
         entity.setIncrementOnSave(1);
 
-        var savedEntity = fir().save().type(OnSaveEntity.class).entity(entity).now();
+        var savedEntity = fir().type(OnSaveEntity.class).save().entity(entity).now();
         assertNotNull(savedEntity);
 
         assertNotNull(savedEntity);

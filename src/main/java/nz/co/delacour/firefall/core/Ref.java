@@ -31,7 +31,7 @@ public class Ref<T extends HasId<T>> {
             return;
         }
 
-        this.reference = fir().load().type(entityClass).ref(id);
+        this.reference = fir().type(entityClass).load().ref(id);
     }
 
     @Exclude

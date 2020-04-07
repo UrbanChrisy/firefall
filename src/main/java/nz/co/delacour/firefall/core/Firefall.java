@@ -3,9 +3,9 @@ package nz.co.delacour.firefall.core;
 import com.google.cloud.firestore.Firestore;
 import nz.co.delacour.firefall.core.delete.Deleter;
 import nz.co.delacour.firefall.core.load.Loader;
+import nz.co.delacour.firefall.core.load.Query;
 import nz.co.delacour.firefall.core.save.Saver;
-
-import java.io.Closeable;
+import nz.co.delacour.firefall.core.util.TypeUtils;
 
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
@@ -29,16 +29,8 @@ public class Firefall {
         return factory().getFirestore();
     }
 
-    public Loader load() {
-        return new Loader(this);
-    }
-
-    public Saver save() {
-        return new Saver(this);
-    }
-
-    public Deleter delete() {
-        return new Deleter(this);
+    public <T extends HasId<T>> EntityType<T> type(Class<T> clazz) {
+        return new EntityType<>(this, clazz);
     }
 
 }

@@ -5,6 +5,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.common.base.Strings;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.Ref;
 import nz.co.delacour.firefall.core.annotations.Entity;
 
 import javax.annotation.Nullable;
@@ -133,7 +134,18 @@ public class TypeUtils {
     }
 
     @Nullable
-    public static <T extends HasId<T>> Query getSubCollection(Firestore firestore, Class<T> clazz) {
+    public static <TT extends HasId<TT>, T extends HasId<T>> CollectionReference getSubCollection(Ref<TT> ref, Class<T> clazz) {
+        String kind = getKindRecursive(clazz);
+
+        if (kind == null || ref == null || ref.getReference() == null) {
+            return null;
+        }
+
+        return ref.getReference().collection(kind);
+    }
+
+    @Nullable
+    public static <TT extends HasId<TT>, T extends HasId<T>> Query getCollectionGroup(Firestore firestore, Class<T> clazz) {
         String kind = getKindRecursive(clazz);
 
         if (kind == null) {

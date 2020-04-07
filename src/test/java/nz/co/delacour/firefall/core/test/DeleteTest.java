@@ -24,14 +24,14 @@ public class DeleteTest extends TestBase {
         Basic basic = new Basic();
         basic.setSomeString("someString");
 
-        var entity = fir().save().type(Basic.class).entity(basic).now();
+        var entity = fir().type(Basic.class).save().entity(basic).now();
 
         assertNotNull(entity);
         assertNotNull(entity.getId());
         assertEquals(entity.getSomeString(), basic.getSomeString());
 
-        fir().delete().type(Basic.class).id(entity.getId()).now();
-        var loadEntity = fir().load().type(Basic.class).id(entity.getId()).now();
+        fir().type(Basic.class).delete().id(entity.getId()).now();
+        var loadEntity = fir().type(Basic.class).load().id(entity.getId()).now();
         assertNull(loadEntity);
     }
 

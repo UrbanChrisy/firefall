@@ -4,8 +4,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.common.base.Preconditions;
 import nz.co.delacour.firefall.core.registrar.EntityMetadata;
 
-import java.io.Closeable;
-
 /**
  * ▬▬ι═══════ﺤ            -═══════ι▬▬
  * Created by Chris on 29/09/19.

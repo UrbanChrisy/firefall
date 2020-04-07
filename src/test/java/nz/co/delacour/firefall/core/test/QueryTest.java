@@ -54,10 +54,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity2 = new QueryEntity();
         queryEntity2.setSomeString("someString2");
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someString", "someString1").list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someString", "someString1").list().now().items();
 
         assertNotNull(search);
         assertEquals(1, search.size());
@@ -76,10 +76,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity2 = new QueryEntity();
         queryEntity2.setSomeString("someString2");
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someString in", Lists.newArrayList("someString1", "someString3")).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someString in", Lists.newArrayList("someString1", "someString3")).list().now().items();
 
         assertNotNull(search);
         assertEquals(1, search.size());
@@ -100,10 +100,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity3 = new QueryEntity();
         queryEntity3.setSomeString("someString3");
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someString in", Lists.newArrayList("someString1", "someString2")).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someString in", Lists.newArrayList("someString1", "someString2")).list().now().items();
 
         assertNotNull(search);
         assertEquals(2, search.size());
@@ -118,10 +118,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity2 = new QueryEntity();
         queryEntity2.setSomeInt(2);
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someInt", 1).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someInt", 1).list().now().items();
 
         assertNotNull(search);
         assertEquals(1, search.size());
@@ -140,10 +140,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity2 = new QueryEntity();
         queryEntity2.setSomeBoolean(false);
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someBoolean", true).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someBoolean", true).list().now().items();
 
         assertNotNull(search);
         assertEquals(1, search.size());
@@ -164,10 +164,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity3 = new QueryEntity();
         queryEntity3.setSomeInt(3);
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someInt >", 1).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someInt >", 1).list().now().items();
 
         assertNotNull(search);
         assertEquals(2, search.size());
@@ -192,10 +192,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity3 = new QueryEntity();
         queryEntity3.setSomeInt(3);
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someInt >=", 1).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someInt >=", 1).list().now().items();
 
         assertNotNull(search);
         assertEquals(3, search.size());
@@ -224,10 +224,11 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity3 = new QueryEntity();
         queryEntity3.setSomeInt(3);
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
         assertNotNull(entities);
+        assertEquals(3, entities.size());
 
-        var search = fir().load().type(QueryEntity.class).filter("someInt <", 3).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someInt <", 3).list().now().items();
 
         assertNotNull(search);
         assertEquals(2, search.size());
@@ -253,10 +254,10 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity3 = new QueryEntity();
         queryEntity3.setSomeInt(3);
 
-        var entities = fir().save().type(QueryEntity.class).entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
+        var entities = fir().type(QueryEntity.class).save().entities(Lists.newArrayList(queryEntity1, queryEntity2, queryEntity3)).now();
         assertNotNull(entities);
 
-        var search = fir().load().type(QueryEntity.class).filter("someInt <=", 3).list().now();
+        var search = fir().type(QueryEntity.class).load().filter("someInt <=", 3).list().now().items();
 
         assertNotNull(search);
         assertEquals(3, search.size());
@@ -282,18 +283,21 @@ public class QueryTest extends TestBase {
         QueryEntity queryEntity1 = new QueryEntity();
         queryEntity1.setSomeString("someString1");
 
-        var entity = fir().save().type(QueryEntity.class).entity(queryEntity1).now();
+        var entity = fir().type(QueryEntity.class).save().entity(queryEntity1).now();
         assertNotNull(entity);
         assertNotNull(entity.getId());
 
-        Basic basic = new Basic();
-        basic.setSomeString("someString2");
+        Basic basic1 = new Basic();
+        basic1.setSomeString("someString2");
 
-        var entity2 = fir().save().type(Basic.class).parent(entity.ref()).entity(basic).now();
-        assertNotNull(entity2);
-        assertNotNull(entity2.getId());
+        Basic basic2 = new Basic();
+        basic2.setSomeString("someString3");
 
-        var search = fir().load().type(Basic.class).filter("someString", "someString2").list().now();
+        var entities = fir().type(Basic.class).parent(entity.ref()).save().entities(Lists.newArrayList(basic1, basic2)).now();
+        assertNotNull(entities);
+        assertEquals(2, entities.size());
+
+        var search = fir().type(Basic.class).parent(entity.ref()).load().filter("someString", "someString2").list().now().items();
         assertNotNull(search);
         assertFalse(search.isEmpty());
         assertEquals( 1, search.size());
