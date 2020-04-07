@@ -302,9 +302,14 @@ public class QueryTest extends TestBase {
         assertFalse(search.isEmpty());
         assertEquals( 1, search.size());
 
-
         assertNotNull(search.get(0).ref());
         assertNotNull(search.get(0).ref().getReference());
+
+        fir().type(Basic.class).parent(entity.ref()).delete().id(search.get(0).getId()).now();
+
+        var search2 = fir().type(Basic.class).parent(entity.ref()).load().filter("someString", "someString2").list().now().items();
+        assertNotNull(search2);
+        assertTrue(search2.isEmpty());
 
     }
 
