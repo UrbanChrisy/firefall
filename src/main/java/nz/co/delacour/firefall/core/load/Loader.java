@@ -1,32 +1,54 @@
 package nz.co.delacour.firefall.core.load;
 
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
-import nz.co.delacour.firefall.core.Firefall;
+import com.google.cloud.firestore.Transaction;
+import com.google.common.base.Strings;
+import nz.co.delacour.firefall.core.EntityType;
 import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.Ref;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
+import javax.annotation.Nullable;
+import java.util.function.Function;
 
-public class Loader {
 
-    private final Firefall firefall;
+public class Loader<T extends HasId<T>> extends Query<T> {
 
-    private final DocumentReference parent;
-
-    public Loader(Firefall firefall, DocumentReference parent) {
-        this.firefall = firefall;
-        this.parent = parent;
+    public Loader(EntityType<T> entityType, Class<T> entityClass, CollectionReference collection, Transaction transaction) {
+        super(entityType, entityClass, collection, collection, transaction);
     }
 
-    public Firefall getFirefall() {
-        return firefall;
+    public LoadResult<T> id(String id) {
+        if (this.collection == null || Strings.isNullOrEmpty(id)) {
+            return new LoadResult<>(entityClass, transaction);
+        }
+        return new LoadResult<>(this.collection.document(id), entityClass, afterLoad, transaction);
     }
 
-    public <T extends HasId<T>> LoadType<T> type(Class<T> entityClass) {
-        return new LoadType<>(this, entityClass, parent);
+    @Nullable
+    public DocumentReference ref(String id) {
+        if (collection == null) {
+            return null;
+        }
+        return this.collection.document(id);
+    }
+
+    public LoadResult<T> ref(DocumentReference reference) {
+        return new LoadResult<>(reference, entityClass, transaction);
+    }
+
+    public LoadResult<T> ref(Ref<T> ref) {
+        return new LoadResult<>(ref.getReference(), entityClass, afterLoad, transaction);
+    }
+
+    public Loader<T> afterLoad(Function<T, T> afterLoad) {
+        this.afterLoad = afterLoad;
+        return this;
+    }
+
+    public Loader<T> transaction(Transaction transaction) {
+        this.transaction = transaction;
+        return this;
     }
 
 }

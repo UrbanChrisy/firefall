@@ -14,7 +14,7 @@ import nz.co.delacour.firefall.core.annotations.Entity;
 @Entity
 public class Basic extends HasId<Basic> {
 
-    private String testString;
+    private String someString;
 
     public Basic() {
         super(Basic.class);

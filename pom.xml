@@ -22,22 +22,22 @@
         <maven.github.version>1.0.2</maven.github.version>
 
 
-        <lombok.version>1.18.10</lombok.version>
-        <google.cloud.firestore.version>1.32.2</google.cloud.firestore.version>
+        <lombok.version>1.18.12</lombok.version>
+        <google.cloud.firestore.version>1.32.5</google.cloud.firestore.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
         <javax.version>3.0-alpha-1</javax.version>
 
         <!--Testing-->
         <junit.platform.version>1.0.3</junit.platform.version>
         <junit.jupiter.version>5.6.0</junit.jupiter.version>
-        <mockito.version>3.2.4</mockito.version>
+        <mockito.version>3.3.3</mockito.version>
         <google.truth.version>1.0.1</google.truth.version>
 
     </properties>
 
     <groupId>nz.co.delacour</groupId>
     <artifactId>firefall-core</artifactId>
-    <version>0.0.18</version>
+    <version>0.1.4</version>
     <packaging>jar</packaging>
 
     <name>Firefall</name>

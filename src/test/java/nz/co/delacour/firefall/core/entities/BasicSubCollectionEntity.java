@@ -12,10 +12,10 @@ import nz.co.delacour.firefall.core.annotations.SubCollectionEntity;
  */
 
 @Data
-@Entity(parent = Basic.class)
+@Entity
 public class BasicSubCollectionEntity extends HasId<BasicSubCollectionEntity> {
 
-    private String testString;
+    private String someString;
 
     public BasicSubCollectionEntity() {
         super(BasicSubCollectionEntity.class);

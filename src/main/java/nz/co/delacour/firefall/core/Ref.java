@@ -4,8 +4,6 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.annotation.Exclude;
 import com.google.common.base.Strings;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import nz.co.delacour.firefall.core.load.LoadResult;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -13,11 +11,6 @@ import java.nio.charset.StandardCharsets;
 
 import static nz.co.delacour.firefall.core.FirefallService.fir;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 @Data
 public class Ref<T extends HasId<T>> {
@@ -32,7 +25,7 @@ public class Ref<T extends HasId<T>> {
             return;
         }
 
-        this.reference = fir().load().type(entityClass).ref(id);
+        this.reference = fir().type(entityClass).load().ref(id);
     }
 
     @Exclude
@@ -45,25 +38,16 @@ public class Ref<T extends HasId<T>> {
         return this.reference.getId();
     }
 
-    @Exclude
-    public T get(Class<T> entityClass) {
-        return load(entityClass).now();
-    }
-
-    @Exclude
-    public LoadResult<T> load(Class<T> entityClass) {
-        return new LoadResult<T>(this.reference, entityClass);
-    }
-
     public static <T extends HasId<T>> Ref<T> create(Class<T> entityClass, String id) {
         return new Ref<T>(entityClass, id);
     }
 
     @Override
     public String toString() {
-        return "Ref<?>(" + this.getId() + ")";
+        return this.getId();
     }
 
+    @Exclude
     public String toUrlSafe() {
 
         var id = this.getId();
@@ -78,4 +62,11 @@ public class Ref<T extends HasId<T>> {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ref<T> ref = (Ref<T>) o;
+        return ref.getId().equals(this.getId());
+    }
 }

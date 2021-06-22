@@ -2,66 +2,55 @@ package nz.co.delacour.firefall.core.load;
 
 import com.google.cloud.firestore.*;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import nz.co.delacour.firefall.core.EntityType;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
-import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
-import nz.co.delacour.firefall.core.util.TypeUtils;
 
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
-import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
-
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 @Slf4j
 public class Query<T extends HasId<T>> {
 
-     final Loader loader;
+    final EntityType<T> entityType;
+    final Class<T> entityClass;
+    com.google.cloud.firestore.Query query;
+    Function<T, T> afterLoad;
 
-     final Class<T> entityClass;
+    @Nullable
+    final CollectionReference collection;
+    Transaction transaction;
 
-     CollectionReference collection;
-
-     com.google.cloud.firestore.Query query;
-
-    public Query(Loader loader, Class<T> entityClass, DocumentReference parent) {
-        this.loader = loader;
+    public Query(EntityType<T> entityType,
+                 Class<T> entityClass,
+                 com.google.cloud.firestore.Query query,
+                 @Nullable CollectionReference collection,
+                 Transaction transaction) {
+        this.entityType = entityType;
         this.entityClass = entityClass;
-        this.collection = TypeUtils.getCollection(loader.getFirefall().factory().getFirestore(), entityClass, parent);
-        this.query = this.collection;
+        this.query = query;
+        this.collection = collection;
+        this.transaction = transaction;
     }
 
-    public Query(Loader loader, Class<T> entityClass, CollectionReference collectionQuery) {
-        this.loader = loader;
+    public Query(EntityType<T> entityType,
+                 Class<T> entityClass,
+                 com.google.cloud.firestore.Query query,
+                 Transaction transaction) {
+        this.entityType = entityType;
         this.entityClass = entityClass;
-        this.collection = collectionQuery;
-        this.query = collectionQuery;
+        this.query = query;
+        this.collection = null;
+        this.transaction = transaction;
     }
 
-    public List<LifecycleMethod> getOnLoadMethods() {
-        var metadata = getMetadata(entityClass);
-        if (metadata == null) {
-            return Lists.newArrayList();
-        }
-
-        var onLoadMethods = metadata.getOnLoadMethods();
-        if (onLoadMethods == null) {
-            return Lists.newArrayList();
-        }
-
-        return onLoadMethods;
-    }
-
-    public CollectionReference getCollection() {
-        return collection;
+    public EntityType<T> getEntityType() {
+        return entityType;
     }
 
     public com.google.cloud.firestore.Query query() {
@@ -93,17 +82,30 @@ public class Query<T extends HasId<T>> {
         return this;
     }
 
-    public Query<T> limit(int limit) {
+    public Query<T> limit(Integer limit) {
+        if (limit == null) {
+            return this;
+        }
+
         this.query = this.query.limit(limit);
         return this;
     }
 
+    public Query<T> offset(Integer offset) {
+        if (offset == null) {
+            return this;
+        }
+
+        this.query = this.query.offset(offset);
+        return this;
+    }
+
     public LoadResult<T> first() {
-        return new LoadResult<>(this.query.limit(1), entityClass);
+        return new LoadResult<>(this.query.limit(1), entityClass, transaction);
     }
 
     public LoadResults<T> list() {
-        return new LoadResults<>(this.query, entityClass);
+        return new LoadResults<>(this, entityClass, transaction);
     }
 
     public Query<T> startAt(DocumentSnapshot documentSnapshot) {
@@ -112,8 +114,74 @@ public class Query<T extends HasId<T>> {
     }
 
     public Query<T> startAt(String cursor) {
-        this.query = this.query.startAt(cursor);
+
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return startAt(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
+    }
+
+    public Query<T> startAfter(DocumentSnapshot documentSnapshot) {
+        this.query = this.query.startAfter(documentSnapshot);
         return this;
+    }
+
+    public Query<T> startAfter(String cursor) {
+
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return startAfter(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
+    }
+
+    public Query<T> endAt(DocumentSnapshot documentSnapshot) {
+        this.query = this.query.endAt(documentSnapshot);
+        return this;
+    }
+
+    public Query<T> endAt(String cursor) {
+
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return endAt(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
+    }
+
+    public Query<T> endBefore(DocumentSnapshot documentSnapshot) {
+        this.query = this.query.endBefore(documentSnapshot);
+        return this;
+    }
+
+    public Query<T> endBefore(String cursor) {
+
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
+            return this;
+        }
+
+        try {
+            var document = this.collection.document(cursor);
+            return endBefore(document.get().get());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new FirefallException(e);
+        }
     }
 
     public Iterator<QueryDocumentSnapshot> iterator() {
@@ -130,37 +198,6 @@ public class Query<T extends HasId<T>> {
         } catch (InterruptedException | ExecutionException e) {
             throw new FirefallException(e);
         }
-    }
-
-    public Query filter(FieldPath field, Object value) {
-        return filter(field, "=", value);
-    }
-
-    public Query filter(FieldPath field, String operatorStr, Object value) {
-        FilterOperator operator = this.translateFilterOperator(operatorStr);
-
-        switch (operator) {
-            case LESS_THAN:
-                this.query = this.query.whereLessThan(field, value);
-                break;
-            case LESS_THAN_OR_EQUAL:
-                this.query = this.query.whereLessThanOrEqualTo(field, value);
-                break;
-            case GREATER_THAN:
-                this.query = this.query.whereGreaterThan(field, value);
-                break;
-            case GREATER_THAN_OR_EQUAL:
-                this.query = this.query.whereGreaterThanOrEqualTo(field, value);
-                break;
-            case EQUAL:
-                this.query = this.query.whereEqualTo(field, value);
-                break;
-            case ARRAY_CONTAINS:
-                this.query = this.query.whereArrayContains(field, value);
-                break;
-        }
-
-        return this;
     }
 
     public Query<T> filter(String condition, Object value) {
@@ -190,6 +227,14 @@ public class Query<T extends HasId<T>> {
                 case EQUAL:
                     this.query = this.query.whereEqualTo(field, value);
                     break;
+                case IN:
+                    List<?> inList = (List<?>) value;
+                    this.query = this.query.whereIn(field, inList);
+                    break;
+                case ARRAY_CONTAINS_ANY:
+                    List<?> anyList = (List<?>) value;
+                    this.query = this.query.whereArrayContainsAny(field, anyList);
+                    break;
                 case ARRAY_CONTAINS:
                     this.query = this.query.whereArrayContains(field, value);
                     break;
@@ -216,10 +261,23 @@ public class Query<T extends HasId<T>> {
             case "<=":
                 return FilterOperator.LESS_THAN_OR_EQUAL;
             case "in":
+                return FilterOperator.IN;
+            case "contains any":
+                return FilterOperator.ARRAY_CONTAINS_ANY;
+            case "contains":
                 return FilterOperator.ARRAY_CONTAINS;
             default:
                 throw new IllegalArgumentException("'" + operator + "' is not a legal filter operator");
         }
     }
 
+    public Query<T> afterLoad(Function<T, T> afterLoad) {
+        this.afterLoad = afterLoad;
+        return this;
+    }
+
+    public Query<T> transaction(Transaction transaction) {
+        this.transaction = transaction;
+        return this;
+    }
 }

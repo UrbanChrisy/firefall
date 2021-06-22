@@ -1,52 +1,39 @@
 package nz.co.delacour.firefall.core;
 
-import com.google.cloud.firestore.DocumentReference;
-import nz.co.delacour.firefall.core.delete.Deleter;
-import nz.co.delacour.firefall.core.load.Loader;
-import nz.co.delacour.firefall.core.save.Saver;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Transaction;
 
-import java.io.Closeable;
+import javax.annotation.Nullable;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
-
-public class Firefall implements Closeable {
+public class Firefall {
 
     private final FirefallFactory firefallFactory;
+    @Nullable
+    private final Transaction transaction;
 
-    private final DocumentReference parent;
-
-    public Firefall(FirefallFactory firefallFactory, DocumentReference parent) {
+    public Firefall(FirefallFactory firefallFactory) {
         this.firefallFactory = firefallFactory;
-        this.parent = parent;
+        this.transaction = null;
     }
 
-    public <T extends HasId<T>> Firefall parent(Ref<T> ref) {
-        return new Firefall(this.firefallFactory, ref.getReference());
+    public Firefall(FirefallFactory firefallFactory, @Nullable Transaction transaction) {
+        this.firefallFactory = firefallFactory;
+        this.transaction = transaction;
     }
 
     public FirefallFactory factory() {
         return firefallFactory;
     }
 
-    public Loader load() {
-        return new Loader(this, parent);
+    public Firestore getFirestore() {
+        return factory().getFirestore();
     }
 
-    public Saver save() {
-        return new Saver(this, parent);
+    public <T extends HasId<T>> EntityType<T> type(Class<T> clazz) {
+        return new EntityType<>(this, clazz, transaction);
     }
 
-    public Deleter delete() {
-        return new Deleter(this, parent);
+    public Firefall transaction(Transaction transaction) {
+        return new Firefall(this.firefallFactory, transaction);
     }
-
-    @Override
-    public void close() {
-        factory().close(this);
-    }
-
 }
