@@ -8,6 +8,11 @@ import nz.co.delacour.firefall.core.util.TypeUtils;
 
 import java.util.Map;
 
+/**
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ * Created by Chris on 14/10/19.
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ */
 
 public class Registrar {
 

@@ -5,7 +5,6 @@ import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.Transaction;
 import com.google.common.base.Strings;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.exceptions.FirefallException;
@@ -15,81 +14,39 @@ import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
 import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
+/**
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ * Created by Chris on 29/09/19.
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ */
 
 public class LoadResult<T extends HasId<T>> {
 
     private final Class<T> entityClass;
+
     private final ApiFuture<?> future;
-    @Nullable
-    private Function<T, T> afterLoad;
-    private final Transaction transaction;
-    private T entity;
 
     public LoadResult(Class<T> entityClass) {
         this.entityClass = entityClass;
         this.future = ApiFutures.immediateFuture(null);
-        this.transaction = null;
-        this.entity = null;
     }
 
-    public LoadResult(Class<T> entityClass, T entity) {
+    public LoadResult(DocumentReference reference, Class<T> entityClass) {
         this.entityClass = entityClass;
-        this.future = ApiFutures.immediateFuture(null);
-        this.transaction = null;
-        this.entity = entity;
+        this.future = reference.get();
     }
 
-    public LoadResult(Class<T> entityClass, Transaction transaction) {
+    public LoadResult(com.google.cloud.firestore.Query query, Class<T> entityClass) {
         this.entityClass = entityClass;
-        this.future = ApiFutures.immediateFuture(null);
-        this.transaction = transaction;
-    }
-
-    public LoadResult(DocumentReference reference, Class<T> entityClass, Transaction transaction) {
-        this(reference, entityClass, null, transaction);
-    }
-
-    public LoadResult(DocumentReference reference, Class<T> entityClass, @Nullable Function<T, T> afterLoad, Transaction transaction) {
-        this.entityClass = entityClass;
-        this.afterLoad = afterLoad;
-        this.transaction = transaction;
-
-        if (transaction != null) {
-            this.future = transaction.get(reference);
-        } else {
-            this.future = reference.get();
-        }
-    }
-
-    public LoadResult(com.google.cloud.firestore.Query query, Class<T> entityClass, Transaction transaction) {
-      this(query, entityClass, null, transaction);
-    }
-
-
-    public LoadResult(com.google.cloud.firestore.Query query, Class<T> entityClass, @Nullable Function<T, T> afterLoad, Transaction transaction) {
-        query = query.limit(1);
-        this.entityClass = entityClass;
-        this.afterLoad = afterLoad;
-        this.transaction = transaction;
-        if (transaction != null) {
-            this.future = transaction.get(query);
-        } else {
-            this.future = query.get();
-        }
+        this.future = query.limit(1).get();
     }
 
     @Nullable
     public T now() {
-
-        if (entity != null) {
-            executeOnLoad(entity);
-            return entity;
-        }
-
+        T entity;
         String id;
         DocumentSnapshot documentSnapshot;
 
@@ -121,17 +78,13 @@ public class LoadResult<T extends HasId<T>> {
 
         executeOnLoad(entity);
 
-        if (afterLoad != null) {
-            entity = afterLoad.apply(entity);
-        }
-
         return entity;
     }
 
     public T safe() {
         T entity = now();
         if (entity == null) {
-            throw new NotFoundException(String.format("%s not found", entityClass.getSimpleName()));
+            throw new NotFoundException();
         }
 
         return entity;
@@ -156,6 +109,7 @@ public class LoadResult<T extends HasId<T>> {
         for (LifecycleMethod onLoadMethod : onLoadMethods) {
             onLoadMethod.execute(entity);
         }
+
     }
 
 }

@@ -3,7 +3,6 @@ package nz.co.delacour.firefall.core.save;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -16,44 +15,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
 import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
+/**
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ * Created by Chris on 9/10/19.
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ */
 
 public class SaveResults<T extends HasId<T>> {
 
     private final Class<T> entityClass;
-    private final SetOptions setOptions;
+
     private final Map<DocumentReference, T> map;
+
     private final ApiFuture<List<WriteResult>> future;
-    private final Function<T, T> beforeSave;
-    private final Function<T, T> afterSave;
 
-    public SaveResults(List<T> items, Class<T> entityClass, CollectionReference collection, Function<T, T> beforeSave, Function<T, T> afterSave) {
-        this(items, entityClass, collection, beforeSave, afterSave, SetOptions.merge());
-    }
-
-    public SaveResults(List<T> items, Class<T> entityClass, CollectionReference collection, Function<T, T> beforeSave, Function<T, T> afterSave, SetOptions setOptions) {
+    public SaveResults(List<T> items, Class<T> entityClass, CollectionReference collection) {
         this.entityClass = entityClass;
-        this.setOptions = setOptions;
-
-        this.beforeSave = beforeSave;
-        this.afterSave = afterSave;
-
-        var onSaveMethods = getOnSaveMethods();
 
         Map<DocumentReference, T> map = Maps.newHashMap();
         for (T t : items) {
-
-            if (this.beforeSave != null) {
-                t = this.beforeSave.apply(t);
-            }
-
-            for (LifecycleMethod onSaveMethod : onSaveMethods) {
-                onSaveMethod.execute(t);
-            }
-
             DocumentReference reference;
             if (Strings.isNullOrEmpty(t.getId())) {
                 reference = collection.document();
@@ -68,23 +51,22 @@ public class SaveResults<T extends HasId<T>> {
         this.map = map;
 
         var batch = collection.getFirestore().batch();
-
         for (Map.Entry<DocumentReference, T> entry : this.map.entrySet()) {
-            batch.set(entry.getKey(), entry.getValue(), setOptions);
+            batch.set(entry.getKey(), entry.getValue());
         }
-
         this.future = batch.commit();
     }
 
     public List<T> now() {
         try {
             this.future.get();
-            List<T> entities = Lists.newArrayList();
-            for (T entity : this.map.values()) {
-                if (afterSave != null) {
-                    entity = this.afterSave.apply(entity);
+            List<T> entities = Lists.newArrayList(this.map.values());
+
+            var onSaveMethods = getOnSaveMethods();
+            for (T entity : entities) {
+                for (LifecycleMethod onSaveMethod : onSaveMethods) {
+                    onSaveMethod.execute(entity);
                 }
-                entities.add(entity);
             }
 
             return entities;
@@ -101,6 +83,7 @@ public class SaveResults<T extends HasId<T>> {
     public List<DocumentReference> refs() {
         return Lists.newArrayList(this.map.keySet());
     }
+
 
     private List<LifecycleMethod> getOnSaveMethods() {
         var metadata = getMetadata(entityClass);

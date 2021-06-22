@@ -7,6 +7,11 @@ import com.google.common.base.Strings;
 import lombok.Data;
 import nz.co.delacour.firefall.core.HasId;
 
+/**
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ * Created by Chris on 13/10/19.
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ */
 
 public class EntityMapper {
 

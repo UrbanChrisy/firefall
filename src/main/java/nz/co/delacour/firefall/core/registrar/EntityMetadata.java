@@ -10,6 +10,11 @@ import nz.co.delacour.firefall.core.annotations.OnSave;
 import java.lang.reflect.Method;
 import java.util.List;
 
+/**
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ * Created by Chris on 14/10/19.
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ */
 
 @Data
 public class EntityMetadata<T extends HasId<T>> {

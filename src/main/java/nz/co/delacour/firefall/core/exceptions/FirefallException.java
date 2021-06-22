@@ -1,5 +1,10 @@
 package nz.co.delacour.firefall.core.exceptions;
 
+/**
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ * Created by Chris on 29/09/19.
+ * ▬▬ι═══════ﺤ            -═══════ι▬▬
+ */
 
 public class FirefallException extends RuntimeException {
 
