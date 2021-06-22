@@ -1,10 +1,5 @@
 package nz.co.delacour.firefall.core.load;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public enum FilterOperator {
     LESS_THAN,
@@ -12,5 +7,7 @@ public enum FilterOperator {
     GREATER_THAN,
     GREATER_THAN_OR_EQUAL,
     EQUAL,
-    ARRAY_CONTAINS;
+    IN,
+    ARRAY_CONTAINS,
+    ARRAY_CONTAINS_ANY;
 }

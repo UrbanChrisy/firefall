@@ -24,6 +24,7 @@
 
         <lombok.version>1.18.10</lombok.version>
         <google.cloud.firestore.version>1.32.2</google.cloud.firestore.version>
+        <firebase.version>7.1.0</firebase.version>
         <slf4j.version>2.0.0-alpha1</slf4j.version>
         <javax.version>3.0-alpha-1</javax.version>
 
@@ -202,11 +203,6 @@
                             <tagName>v${version}</tagName>
                             <name>v${version}</name>
                             <targetCommitish>master</targetCommitish>
-<!--                            <releaseNotes>src/main/resources/release-notes-example.md</releaseNotes>-->
-<!--                            <assets>-->
-<!--                                <asset>src/main/resources/asset-plain-text-example.txt</asset>-->
-<!--                                <asset>src/main/resources/asset-zip-example.zip</asset>-->
-<!--                            </assets>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -228,6 +224,12 @@
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-firestore</artifactId>
             <version>${google.cloud.firestore.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>${firebase.version}</version>
         </dependency>
 
         <dependency>

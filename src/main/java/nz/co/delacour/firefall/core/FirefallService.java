@@ -1,16 +1,9 @@
 package nz.co.delacour.firefall.core;
 
 import com.google.cloud.firestore.Firestore;
-import com.google.common.base.Preconditions;
+import com.google.firebase.cloud.FirestoreClient;
 import nz.co.delacour.firefall.core.registrar.EntityMetadata;
 
-import java.io.Closeable;
-
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public class FirefallService {
 
@@ -19,25 +12,27 @@ public class FirefallService {
     public FirefallService() {
     }
 
-    public static void init(Firestore firestore) {
-        init(new FirefallFactory(firestore));
+    public static FirefallFactory init(Firestore firestore) {
+        return init(new FirefallFactory(firestore));
     }
 
-    public static void init(FirefallFactory fact) {
-        factory = fact;
+    public static FirefallFactory init(FirefallFactory fact) {
+        FirefallService.factory = fact;
+        return fact;
     }
 
     public static FirefallFactory factory() {
-        Preconditions.checkState(factory != null, "You must call FirefallFactory.init() before using Firefall");
+
+        if (factory == null) {
+            Firestore firestore = FirestoreClient.getFirestore();
+            init(firestore);
+        }
+
         return factory;
     }
 
     public static Firefall fir() {
         return factory().fir();
-    }
-
-    public static Closeable begin() {
-        return factory().open();
     }
 
     public static <T extends HasId<T>> void register(Class<T> clazz) {

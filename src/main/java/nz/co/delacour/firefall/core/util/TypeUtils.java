@@ -1,9 +1,11 @@
 package nz.co.delacour.firefall.core.util;
 
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.common.base.Strings;
+import nz.co.delacour.firefall.core.HasId;
+import nz.co.delacour.firefall.core.Ref;
 import nz.co.delacour.firefall.core.annotations.Entity;
 
 import javax.annotation.Nullable;
@@ -17,11 +19,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public class TypeUtils {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = new HashMap<>();
@@ -108,6 +105,10 @@ public class TypeUtils {
     }
 
     public static <A extends Annotation> A getDeclaredAnnotation(Class<?> onClass, Class<A> annotationType) {
+        if (onClass == null) {
+            return null;
+        }
+
         return getAnnotation(onClass.getDeclaredAnnotations(), annotationType);
     }
 
@@ -121,24 +122,46 @@ public class TypeUtils {
     }
 
     @Nullable
-    public static CollectionReference getCollection(Firestore firestore, Class<?> clazz, DocumentReference parent) {
+    public static <T extends HasId<T>> CollectionReference getCollection(Firestore firestore, Class<T> clazz) {
         String kind = getKindRecursive(clazz);
 
         if (kind == null) {
             return null;
         }
 
-        if (parent != null) {
-            kind = String.format("%s/%s", parent.getPath(), kind);
+        return firestore.collection(kind);
+    }
+
+    @Nullable
+    public static <TT extends HasId<TT>, T extends HasId<T>> CollectionReference getSubCollection(Ref<TT> ref, Class<T> clazz) {
+        String kind = getKindRecursive(clazz);
+
+        if (kind == null || ref == null || ref.getReference() == null) {
+            return null;
         }
 
-        return firestore.collection(kind);
+        return ref.getReference().collection(kind);
+    }
+
+    @Nullable
+    public static <TT extends HasId<TT>, T extends HasId<T>> Query getCollectionGroup(Firestore firestore, Class<T> clazz) {
+        String kind = getKindRecursive(clazz);
+
+        if (kind == null) {
+            return null;
+        }
+
+        return firestore.collectionGroup(kind);
     }
 
     public static String getKindRecursive(Class<?> clazz) {
         if (clazz == Object.class) {
             return null;
         } else {
+            if (clazz == null) {
+                return null;
+            }
+
             String kind = getKindHere(clazz);
             return !Strings.isNullOrEmpty(kind) ? kind : getKindRecursive(clazz.getSuperclass());
         }
