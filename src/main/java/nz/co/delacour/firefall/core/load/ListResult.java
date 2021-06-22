@@ -2,8 +2,6 @@ package nz.co.delacour.firefall.core.load;
 
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.common.collect.Lists;
-import lombok.Data;
-import lombok.Getter;
 import nz.co.delacour.firefall.core.HasId;
 import nz.co.delacour.firefall.core.registrar.LifecycleMethod;
 
@@ -11,11 +9,6 @@ import java.util.List;
 
 import static nz.co.delacour.firefall.core.FirefallService.getMetadata;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 7/04/20.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public class ListResult<T extends HasId<T>> {
 
@@ -27,7 +20,7 @@ public class ListResult<T extends HasId<T>> {
 
         var numberOfDocuments = documents.size();
         if (numberOfDocuments > 0) {
-            var lastDocument =  documents.get(numberOfDocuments - 1);
+            var lastDocument = documents.get(numberOfDocuments - 1);
             if (lastDocument != null) {
                 this.cursor = lastDocument.getId();
             }

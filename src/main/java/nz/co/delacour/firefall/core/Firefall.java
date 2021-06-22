@@ -1,24 +1,24 @@
 package nz.co.delacour.firefall.core;
 
 import com.google.cloud.firestore.Firestore;
-import nz.co.delacour.firefall.core.delete.Deleter;
-import nz.co.delacour.firefall.core.load.Loader;
-import nz.co.delacour.firefall.core.load.Query;
-import nz.co.delacour.firefall.core.save.Saver;
-import nz.co.delacour.firefall.core.util.TypeUtils;
+import com.google.cloud.firestore.Transaction;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
+import javax.annotation.Nullable;
 
 public class Firefall {
 
     private final FirefallFactory firefallFactory;
+    @Nullable
+    private final Transaction transaction;
 
     public Firefall(FirefallFactory firefallFactory) {
         this.firefallFactory = firefallFactory;
+        this.transaction = null;
+    }
+
+    public Firefall(FirefallFactory firefallFactory, @Nullable Transaction transaction) {
+        this.firefallFactory = firefallFactory;
+        this.transaction = transaction;
     }
 
     public FirefallFactory factory() {
@@ -30,7 +30,10 @@ public class Firefall {
     }
 
     public <T extends HasId<T>> EntityType<T> type(Class<T> clazz) {
-        return new EntityType<>(this, clazz);
+        return new EntityType<>(this, clazz, transaction);
     }
 
+    public Firefall transaction(Transaction transaction) {
+        return new Firefall(this.firefallFactory, transaction);
+    }
 }

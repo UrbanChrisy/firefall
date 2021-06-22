@@ -3,33 +3,30 @@ package nz.co.delacour.firefall.core.delete;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Precondition;
+import com.google.cloud.firestore.Transaction;
 import lombok.Data;
 import nz.co.delacour.firefall.core.EntityType;
 import nz.co.delacour.firefall.core.HasId;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 8/10/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 @Data
 public class Deleter<T extends HasId<T>> {
 
     private final EntityType<T> entityType;
-
     private final Class<T> entityClass;
-
     private final CollectionReference collection;
+    @Nullable
+    private final Transaction transaction;
 
-    public Deleter(EntityType<T> entityType, Class<T> entityClass, CollectionReference collection) {
+    public Deleter(EntityType<T> entityType, Class<T> entityClass, CollectionReference collection, @Nullable Transaction transaction) {
         this.entityType = entityType;
         this.entityClass = entityClass;
         this.collection = collection;
+        this.transaction = transaction;
     }
 
     public EntityType<T> getEntityType() {
@@ -47,7 +44,7 @@ public class Deleter<T extends HasId<T>> {
     }
 
     public DeleteResult<T> document(DocumentReference reference) {
-        return new DeleteResult<>(reference, Precondition.NONE);
+        return new DeleteResult<>(reference, Precondition.NONE, transaction);
     }
 
     public DeleteResult<T> id(String id, Precondition options) {
@@ -61,7 +58,7 @@ public class Deleter<T extends HasId<T>> {
     }
 
     public DeleteResult<T> document(DocumentReference reference, Precondition options) {
-        return new DeleteResult<>(reference, options);
+        return new DeleteResult<>(reference, options, transaction);
     }
 
     public DeleteResults<T> entities(List<T> entities) {

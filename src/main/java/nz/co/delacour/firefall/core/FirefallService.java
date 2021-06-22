@@ -1,14 +1,9 @@
 package nz.co.delacour.firefall.core;
 
 import com.google.cloud.firestore.Firestore;
-import com.google.common.base.Preconditions;
+import com.google.firebase.cloud.FirestoreClient;
 import nz.co.delacour.firefall.core.registrar.EntityMetadata;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public class FirefallService {
 
@@ -26,7 +21,12 @@ public class FirefallService {
     }
 
     public static FirefallFactory factory() {
-        Preconditions.checkState(factory != null, "You must call FirefallFactory.init() before using Firefall");
+
+        if (factory == null) {
+            Firestore firestore = FirestoreClient.getFirestore();
+            init(firestore);
+        }
+
         return factory;
     }
 

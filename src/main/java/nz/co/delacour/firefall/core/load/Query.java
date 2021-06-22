@@ -1,9 +1,6 @@
 package nz.co.delacour.firefall.core.load;
 
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldPath;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.*;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import nz.co.delacour.firefall.core.EntityType;
@@ -14,37 +11,42 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 @Slf4j
 public class Query<T extends HasId<T>> {
 
     final EntityType<T> entityType;
-
     final Class<T> entityClass;
-
     com.google.cloud.firestore.Query query;
+    Function<T, T> afterLoad;
 
     @Nullable
     final CollectionReference collection;
+    Transaction transaction;
 
-    public Query(EntityType<T> entityType, Class<T> entityClass, com.google.cloud.firestore.Query query, CollectionReference collection) {
+    public Query(EntityType<T> entityType,
+                 Class<T> entityClass,
+                 com.google.cloud.firestore.Query query,
+                 @Nullable CollectionReference collection,
+                 Transaction transaction) {
         this.entityType = entityType;
         this.entityClass = entityClass;
         this.query = query;
         this.collection = collection;
+        this.transaction = transaction;
     }
 
-    public Query(EntityType<T> entityType, Class<T> entityClass, com.google.cloud.firestore.Query query) {
+    public Query(EntityType<T> entityType,
+                 Class<T> entityClass,
+                 com.google.cloud.firestore.Query query,
+                 Transaction transaction) {
         this.entityType = entityType;
         this.entityClass = entityClass;
         this.query = query;
         this.collection = null;
+        this.transaction = transaction;
     }
 
     public EntityType<T> getEntityType() {
@@ -80,17 +82,30 @@ public class Query<T extends HasId<T>> {
         return this;
     }
 
-    public Query<T> limit(int limit) {
+    public Query<T> limit(Integer limit) {
+        if (limit == null) {
+            return this;
+        }
+
         this.query = this.query.limit(limit);
         return this;
     }
 
+    public Query<T> offset(Integer offset) {
+        if (offset == null) {
+            return this;
+        }
+
+        this.query = this.query.offset(offset);
+        return this;
+    }
+
     public LoadResult<T> first() {
-        return new LoadResult<>(this.query.limit(1), entityClass);
+        return new LoadResult<>(this.query.limit(1), entityClass, transaction);
     }
 
     public LoadResults<T> list() {
-        return new LoadResults<>(this, entityClass);
+        return new LoadResults<>(this, entityClass, transaction);
     }
 
     public Query<T> startAt(DocumentSnapshot documentSnapshot) {
@@ -100,7 +115,7 @@ public class Query<T extends HasId<T>> {
 
     public Query<T> startAt(String cursor) {
 
-        if (this.collection == null) {
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
             return this;
         }
 
@@ -119,7 +134,7 @@ public class Query<T extends HasId<T>> {
 
     public Query<T> startAfter(String cursor) {
 
-        if (this.collection == null) {
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
             return this;
         }
 
@@ -138,7 +153,7 @@ public class Query<T extends HasId<T>> {
 
     public Query<T> endAt(String cursor) {
 
-        if (this.collection == null) {
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
             return this;
         }
 
@@ -157,7 +172,7 @@ public class Query<T extends HasId<T>> {
 
     public Query<T> endBefore(String cursor) {
 
-        if (this.collection == null) {
+        if (this.collection == null || Strings.isNullOrEmpty(cursor)) {
             return this;
         }
 
@@ -256,4 +271,13 @@ public class Query<T extends HasId<T>> {
         }
     }
 
+    public Query<T> afterLoad(Function<T, T> afterLoad) {
+        this.afterLoad = afterLoad;
+        return this;
+    }
+
+    public Query<T> transaction(Transaction transaction) {
+        this.transaction = transaction;
+        return this;
+    }
 }

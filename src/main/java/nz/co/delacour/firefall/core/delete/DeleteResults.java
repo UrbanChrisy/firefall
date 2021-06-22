@@ -12,11 +12,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 10/10/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public class DeleteResults<T extends HasId<T>> {
 

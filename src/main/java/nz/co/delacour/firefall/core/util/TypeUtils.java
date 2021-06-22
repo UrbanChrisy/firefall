@@ -19,11 +19,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public class TypeUtils {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = new HashMap<>();
@@ -110,6 +105,10 @@ public class TypeUtils {
     }
 
     public static <A extends Annotation> A getDeclaredAnnotation(Class<?> onClass, Class<A> annotationType) {
+        if (onClass == null) {
+            return null;
+        }
+
         return getAnnotation(onClass.getDeclaredAnnotations(), annotationType);
     }
 
@@ -159,6 +158,10 @@ public class TypeUtils {
         if (clazz == Object.class) {
             return null;
         } else {
+            if (clazz == null) {
+                return null;
+            }
+
             String kind = getKindHere(clazz);
             return !Strings.isNullOrEmpty(kind) ? kind : getKindRecursive(clazz.getSuperclass());
         }

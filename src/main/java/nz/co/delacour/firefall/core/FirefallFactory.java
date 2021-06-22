@@ -4,11 +4,6 @@ import com.google.cloud.firestore.Firestore;
 import nz.co.delacour.firefall.core.registrar.EntityMetadata;
 import nz.co.delacour.firefall.core.registrar.Registrar;
 
-/**
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- * Created by Chris on 29/09/19.
- * ▬▬ι═══════ﺤ            -═══════ι▬▬
- */
 
 public class FirefallFactory {
 
@@ -30,7 +25,7 @@ public class FirefallFactory {
     }
 
     public Firefall fir() {
-        return new Firefall(this);
+        return new Firefall(this, null);
     }
 
     public <T extends HasId<T>> void register(final Class<T> clazz) {
